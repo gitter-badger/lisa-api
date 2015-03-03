@@ -14,66 +14,56 @@
 
 from lisa_api import db, api, core
 from flask.ext.restplus import Resource, fields
-from .user import User, Role, user_datastore
+from .user import User, user_datastore
+from .api_role import role_api
 
-role_api = api.model('Role', {
-    'name': fields.String(required=True, description='Role name'),
-    'description': fields.String(required=True, description='User password')
-})
-
-role_parser = api.parser()
-role_parser.add_argument('task', type=str, required=True, help='The task details', location='form')
-
-user_api = api.model('User', {
+user_api_read = api.model('User', {
+    'id': fields.Integer(required=True, description='User id'),
     'username': fields.String(required=True, description='User username'),
     'firstname': fields.String(required=True, description='User firstname'),
     'lastname': fields.String(required=True, description='User lastname'),
     'email': fields.String(required=True, description='User email'),
     'password': fields.String(required=True, description='User password'),
     'active': fields.Boolean(required=True, description='User is active or not'),
-    'roles': fields.Nested(Role, description='Role assigned to the user')
+    'roles': fields.Nested(role_api, description='Role assigned to the user')
+})
+
+user_api_write = api.model('User', {
+    'id': fields.Integer(required=True, description='User id'),
+    'username': fields.String(required=True, description='User username'),
+    'firstname': fields.String(required=True, description='User firstname'),
+    'lastname': fields.String(required=True, description='User lastname'),
+    'email': fields.String(required=True, description='User email'),
+    'password': fields.String(required=True, description='User password'),
+    'active': fields.Boolean(required=True, description='User is active or not'),
+    'roles': fields.List(fields.String, required=True, description='Role assigned to the user')
 })
 
 user_parser = api.parser()
+user_parser.add_argument('id', type=str, required=False, help='User id', location='form')
 user_parser.add_argument('username', type=str, required=True, help='User username', location='form')
 user_parser.add_argument('firstname', type=str, required=True, help='User firstname', location='form')
 user_parser.add_argument('lastname', type=str, required=True, help='User lastname', location='form')
 user_parser.add_argument('email', type=str, required=True, help='User email', location='form')
 user_parser.add_argument('password', type=str, required=True, help='User password', location='form')
 user_parser.add_argument('active', type=bool, required=True, help='User is active or not', location='form')
+user_parser.add_argument('roles', type=str, required=True, help='List of roles names splitted by coma. Roles must already exist', location='form')
 
-
-@core.route('/role')
-class RoleList(Resource):
-    '''Shows a list of all roles, and lets you POST to add new roles'''
-    @api.marshal_list_with(role_api)
-    def get(self):
-        '''List all roles'''
-        return Role.query.all()
-
-    @api.doc(parser=role_parser)
-    @api.marshal_with(role_api, code=201)
-    def post(self):
-        '''Create a role'''
-        args = role_parser.parse_args()
-        user_datastore.create_role(name=args['name'],
-                                   description=args['description'])
-        db.session.commit()
-        return '', 201
 
 @core.route('/user')
 class UserList(Resource):
     '''Shows a list of all users, and lets you POST to add new users'''
-    @api.marshal_list_with(user_api)
+    @api.marshal_list_with(user_api_read)
     def get(self):
         '''List all users'''
         return User.query.all()
 
     @api.doc(parser=user_parser)
-    @api.marshal_with(user_api, code=201)
+    @api.marshal_with(user_api_write, code=201)
     def post(self):
         '''Create a user'''
         args = user_parser.parse_args()
+        # TODO Need to check if roles exist or not
         user_datastore.create_user(username=args['username'],
                                    email=args['email'],
                                    password=args['password'],
@@ -94,10 +84,11 @@ class UserList(Resource):
         return '', 204
 
     @api.doc(parser=user_parser)
-    @api.marshal_with(user_api)
+    @api.marshal_with(user_api_write)
     def put(self, todo_id):
         '''Update a given resource'''
         args = user_parser.parse_args()
         user = User.query.filter_by(username=args['username']).first()
+        # TODO Need to check if roles exist or not
         if user is not None:
             user = args

@@ -54,7 +54,7 @@ Installation
 
 ::
 
-    pip install lisa_api
+    pip install lisa-api
 
 Documentation
 =============
