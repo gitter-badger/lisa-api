@@ -1,0 +1,9 @@
+Flask
+flask-restplus
+Flask-SQLAlchemy
+pbr
+stevedore
+tox
+virtualenv
+flask-security
+MySQL-python
