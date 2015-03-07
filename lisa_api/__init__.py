@@ -31,16 +31,24 @@ config = CONF
 # Setup logger
 logger = setup_log(name='lisa')
 
-config.add_opt('DEBUG', True)
-config.add_opt('SECRET_KEY', 'super-secret')
-config.add_opt('DATABASE_USER', 'lisa_api')
-config.add_opt('DATABASE_PASSWORD', 'lisa_password')
-config.add_opt('DATABASE_NAME', 'lisa_api')
-config.add_opt('DATABASE_HOST', 'localhost')
-app.config['DEBUG'] = True
-app.config['SECRET_KEY'] = 'super-secret'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://lisa_api:lisapassword@localhost/lisa_api'
+config.add_opt(name='debug', value=True, section='api')
+config.add_opt(name='secret_key', value='super-secret', section='api')
+config.add_opt(name='db_type', value='mysql', section='api')
+config.add_opt(name='db_user', value='lisa_api', section='api')
+config.add_opt(name='db_password', value='lisapassword', section='api')
+config.add_opt(name='db_name', value='lisa_api', section='api')
+config.add_opt(name='db_host', value='localhost', section='api')
 
+app.config['DEBUG'] = config.api.debug
+app.config['SECRET_KEY'] = config.api.secret_key
+
+if config.api.db_type == "mysql":
+    app.config['SQLALCHEMY_DATABASE_URI'] = \
+        "{db_type}://{db_user}:{db_password}@{db_host}/{db_name}".format(
+            db_type=config.api.db_type, db_user=config.api.db_user,
+            db_password=config.api.db_password, db_host=config.api.db_host,
+            db_name=config.api.db_name
+        )
 
 api_v1 = Blueprint('api', __name__, url_prefix='/api/1')
 api = Api(api_v1, version='1.0', title='LISA API', description='L.I.S.A API',
