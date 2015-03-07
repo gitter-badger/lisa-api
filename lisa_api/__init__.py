@@ -13,7 +13,7 @@
 # under the License.
 
 import pbr.version
-from flask import Flask
+from flask import Flask, Blueprint
 from flask.ext.restplus import Api
 from flask.ext.sqlalchemy import SQLAlchemy
 from .lib.logger import setup_log
@@ -28,19 +28,28 @@ app = Flask(__name__)
 
 config = CONF
 
+# Setup logger
+logger = setup_log(name='lisa')
+
 config.add_opt('DEBUG', True)
+config.add_opt('SECRET_KEY', 'super-secret')
+config.add_opt('DATABASE_USER', 'lisa_api')
+config.add_opt('DATABASE_PASSWORD', 'lisa_password')
+config.add_opt('DATABASE_NAME', 'lisa_api')
+config.add_opt('DATABASE_HOST', 'localhost')
 app.config['DEBUG'] = True
 app.config['SECRET_KEY'] = 'super-secret'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://lisa_api:lisapassword@localhost/lisa_api'
 
-api = Api(app, version='0.1', title='LISA API',
-    description='L.I.S.A API',
+
+api_v1 = Blueprint('api', __name__, url_prefix='/api/1')
+api = Api(api_v1, version='1.0', title='LISA API', description='L.I.S.A API',
 )
+logger.info("Running version: %s" % api.version)
+
+app.register_blueprint(api_v1)
 
 # Create database connection object
 db = SQLAlchemy(app)
-
-# Setup logger
-logger = setup_log(name='lisa')
 
 core = api.namespace('core', description='CORE operations')

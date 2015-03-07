@@ -51,7 +51,7 @@ user_parser.add_argument('roles', type=str, required=True, help='List of roles n
 
 
 @core.route('/user')
-class UserList(Resource):
+class UserApi(Resource):
     '''Shows a list of all users, and lets you POST to add new users'''
     @api.marshal_list_with(user_api_read)
     def get(self):
