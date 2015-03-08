@@ -52,14 +52,17 @@ except AttributeError:
     logger.error("A field is missing from the configuration file")
 
 current_api_url = '/api/1'
+
 app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'security/login_user.html'
 app.config['SECURITY_POST_LOGIN_VIEW'] = current_api_url
+app.config['SECURITY_PASSWORD_HASH'] = 'sha512_crypt'
+app.config['SECURITY_PASSWORD_SALT'] = 'shesalive!alive!'
 
 # Register the API
 api_v1 = Blueprint('api', __name__, url_prefix=current_api_url)
 api = Api(api_v1, version='1.0', title='LISA API', description='L.I.S.A API')
 app.register_blueprint(api_v1)
-logger.info("Running version: %s" % api.version)
+logger.info("Running API version: %s" % api.version)
 core = api.namespace('core', description='CORE operations')
 
 # Create database connection object

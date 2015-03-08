@@ -7,3 +7,4 @@ tox
 virtualenv
 flask-security
 MySQL-python
+Flask-Script
