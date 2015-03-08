@@ -15,6 +15,8 @@
 from lisa_api import db, app
 from flask.ext.security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin
+from lisa_api.forms.login_form import ExtendedLoginForm
+
 
 
 # Define models
@@ -34,7 +36,7 @@ class Role(db.Model, RoleMixin):
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(255))
+    username = db.Column(db.String(255), unique=True)
     firstname = db.Column(db.String(255))
     lastname = db.Column(db.String(255))
     email = db.Column(db.String(255), unique=True)
@@ -47,5 +49,7 @@ class User(db.Model, UserMixin):
         return '<User %r>' % self.username
 
 # Setup Flask-Security
-user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-security = Security(app, user_datastore)
+user_datastore = SQLAlchemyUserDatastore(db=db, user_model=User,
+                                         role_model=Role)
+security = Security(app=app, datastore=user_datastore,
+                    login_form=ExtendedLoginForm)

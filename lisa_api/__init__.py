@@ -23,13 +23,11 @@ __version__ = pbr.version.VersionInfo(
     'lisa_api').version_string()
 
 app = Flask(__name__)
-
-# Config
-
-config = CONF
-
 # Setup logger
 logger = setup_log(name='lisa')
+
+# Config
+config = CONF
 
 config.add_opt(name='debug', value=True, section='api')
 config.add_opt(name='secret_key', value='super-secret', section='api')
@@ -39,25 +37,31 @@ config.add_opt(name='db_password', value='lisapassword', section='api')
 config.add_opt(name='db_name', value='lisa_api', section='api')
 config.add_opt(name='db_host', value='localhost', section='api')
 
-app.config['DEBUG'] = config.api.debug
-app.config['SECRET_KEY'] = config.api.secret_key
+try:
+    app.config['DEBUG'] = config.api.debug
+    app.config['SECRET_KEY'] = config.api.secret_key
 
-if config.api.db_type == "mysql":
-    app.config['SQLALCHEMY_DATABASE_URI'] = \
-        "{db_type}://{db_user}:{db_password}@{db_host}/{db_name}".format(
-            db_type=config.api.db_type, db_user=config.api.db_user,
-            db_password=config.api.db_password, db_host=config.api.db_host,
-            db_name=config.api.db_name
-        )
+    if config.api.db_type == "mysql":
+        app.config['SQLALCHEMY_DATABASE_URI'] = \
+            "{db_type}://{db_user}:{db_password}@{db_host}/{db_name}".format(
+                db_type=config.api.db_type, db_user=config.api.db_user,
+                db_password=config.api.db_password, db_host=config.api.db_host,
+                db_name=config.api.db_name
+            )
+except AttributeError:
+    logger.error("A field is missing from the configuration file")
 
-api_v1 = Blueprint('api', __name__, url_prefix='/api/1')
-api = Api(api_v1, version='1.0', title='LISA API', description='L.I.S.A API',
-)
-logger.info("Running version: %s" % api.version)
+current_api_url = '/api/1'
+app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'security/login_user.html'
+app.config['SECURITY_POST_LOGIN_VIEW'] = current_api_url
 
+# Register the API
+api_v1 = Blueprint('api', __name__, url_prefix=current_api_url)
+api = Api(api_v1, version='1.0', title='LISA API', description='L.I.S.A API')
 app.register_blueprint(api_v1)
+logger.info("Running version: %s" % api.version)
+core = api.namespace('core', description='CORE operations')
 
 # Create database connection object
 db = SQLAlchemy(app)
 
-core = api.namespace('core', description='CORE operations')
