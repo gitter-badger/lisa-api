@@ -18,6 +18,7 @@ from flask.ext.restplus import Api
 from flask.ext.sqlalchemy import SQLAlchemy
 from .lib.logger import setup_log
 from .lib.conf import CONF
+from .lib.login import custom_unauthorized
 
 __version__ = pbr.version.VersionInfo(
     'lisa_api').version_string()
@@ -61,8 +62,10 @@ app.config['SECURITY_PASSWORD_SALT'] = 'shesalive!alive!'
 # Register the API
 api_v1 = Blueprint('api', __name__, url_prefix=current_api_url)
 api = Api(api_v1, version='1.0', title='LISA API', description='L.I.S.A API')
+api.unauthorized = custom_unauthorized
 app.register_blueprint(api_v1)
 logger.info("Running API version: %s" % api.version)
+
 core = api.namespace('core', description='CORE operations')
 
 # Create database connection object

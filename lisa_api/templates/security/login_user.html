@@ -13,17 +13,19 @@
         <form action="{{ url_for_security('login') }}" method="POST" name="login_user_form" class="form-1">
             {{ login_user_form.hidden_tag() }}
             <p class="field">
-                <input type="text" name="login" placeholder="Username">
+                {{ render_field(login_user_form.username) }}
                 <i class="fa fa-2 fa-user"></i>
             </p>
             <p class="field">
-                <input type="password" name="password" placeholder="Password">
+                {{ render_field(login_user_form.password) }}
                 <i class="fa fa-2 fa-lock"></i>
             </p>
-            {{ render_field(login_user_form.next) }}
             <p class="submit">
                 <button type="submit" name="submit"><i class="fa fa-2 fa-arrow-right"></i></button>
             </p>
+
+            {{ render_field(login_user_form.next) }}
+
         </form>
     </body>
 </html>

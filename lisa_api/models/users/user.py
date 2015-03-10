@@ -12,12 +12,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from lisa_api import db, app
+from lisa_api import db, app, core
 from flask.ext.security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin
 from lisa_api.forms.login_form import ExtendedLoginForm
-
-
 
 # Define models
 roles_users = db.Table('roles_users',
@@ -53,3 +51,4 @@ user_datastore = SQLAlchemyUserDatastore(db=db, user_model=User,
                                          role_model=Role)
 security = Security(app=app, datastore=user_datastore,
                     login_form=ExtendedLoginForm)
+

@@ -25,7 +25,7 @@ class LisaApi():
 @app.route("/")
 @login_required
 def index():
-    redirect(location=current_api_url)
+    return redirect(location=current_api_url)
 
 
 if __name__ == '__main__':

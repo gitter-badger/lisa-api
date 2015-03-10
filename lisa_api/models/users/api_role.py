@@ -15,6 +15,7 @@
 from lisa_api import db, api, core, logger
 from flask.ext.restplus import Resource, fields
 from .user import Role, user_datastore
+from lisa_api.lib.login import login_api
 
 role_api = api.model('Role', {
     'id': fields.Integer(required=False, description='Role ID'),
@@ -39,7 +40,9 @@ role_parser.add_argument('description', type=str, required=True,
 @core.route('/role/<int:id>')
 class RoleResource(Resource):
     """ Show a single role item and lets you modify or delete it """
-    @api.doc(responses={200: 'Role object', 404: 'Role not found'},
+    decorators = [login_api]
+    @api.doc(responses={200: 'Role object', 404: 'Role not found',
+                        401: 'Unauthorized access'},
              params={'id': 'The Role ID'})
     @api.marshal_with(role_api)
     def get(self, id):
@@ -57,7 +60,8 @@ class RoleResource(Resource):
         else:
             return 'Role not found', 404
 
-    @api.doc(responses={204: 'Role deleted', 404: 'Role not found'},
+    @api.doc(responses={204: 'Role deleted', 404: 'Role not found',
+                        401: 'Unauthorized access'},
              params={'id': 'The Role ID'})
     def delete(self, id):
         """
@@ -77,7 +81,8 @@ class RoleResource(Resource):
             return 'Role not found', 404
 
     #TODO Bug on this method, swagger send a {id} instead of the true id
-    @api.doc(responses={200: 'Role updated', 404: 'Role not found'},
+    @api.doc(responses={200: 'Role updated', 404: 'Role not found',
+                        401: 'Unauthorized access'},
              parser=role_parser)
     @api.marshal_with(role_api)
     def put(self, id):
@@ -104,6 +109,8 @@ class RoleResource(Resource):
 class RoleListResource(Resource):
     """ This class return all roles and is also responsible to handle the creation
     of a role """
+    decorators = [login_api]
+    @api.doc(responses={200: 'Roles list', 401: 'Unauthorized access'})
     @api.marshal_list_with(role_api)
     def get(self):
         """
@@ -114,7 +121,8 @@ class RoleListResource(Resource):
         """
         return Role.query.all()
 
-    @api.doc(parser=rolelist_parser)
+    @api.doc(responses={201: 'Role added', 401: 'Unauthorized access'},
+             parser=rolelist_parser)
     @api.marshal_with(role_api, code=201)
     def post(self):
         """

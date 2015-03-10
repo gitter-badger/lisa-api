@@ -16,6 +16,7 @@ from lisa_api import db, api, core
 from flask.ext.restplus import Resource, fields
 from .user import User, user_datastore
 from .api_role import role_api
+from flask.ext.security import login_required
 
 user_api_read = api.model('User', {
     'id': fields.Integer(required=True, description='User id'),
@@ -53,6 +54,7 @@ user_parser.add_argument('roles', type=str, required=True, help='List of roles n
 @core.route('/user')
 class UserApi(Resource):
     '''Shows a list of all users, and lets you POST to add new users'''
+    decorators = [login_required]
     @api.marshal_list_with(user_api_read)
     def get(self):
         '''List all users'''
