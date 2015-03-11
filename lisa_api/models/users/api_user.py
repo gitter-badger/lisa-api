@@ -48,13 +48,15 @@ user_parser.add_argument('lastname', type=str, required=True, help='User lastnam
 user_parser.add_argument('email', type=str, required=True, help='User email', location='form')
 user_parser.add_argument('password', type=str, required=True, help='User password', location='form')
 user_parser.add_argument('active', type=bool, required=True, help='User is active or not', location='form')
-user_parser.add_argument('roles', type=str, required=True, help='List of roles names splitted by coma. Roles must already exist', location='form')
+user_parser.add_argument('roles', type=str, required=True, help='List of roles names splitted by coma. Roles must already exist',
+                         location='form')
 
 
 @core.route('/user')
 class UserApi(Resource):
     '''Shows a list of all users, and lets you POST to add new users'''
     decorators = [login_required]
+
     @api.marshal_list_with(user_api_read)
     def get(self):
         '''List all users'''

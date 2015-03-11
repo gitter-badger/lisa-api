@@ -1,12 +1,11 @@
 from lisa_api import app, logger, db, current_api_url
 from stevedore import extension
-import models.users.api_user
+from .models.users import api_user
 from flask.ext.security import login_required
 from flask import redirect
 
 
 class LisaApi():
-
     def __init__(self):
         db.create_all()
         # Setup Flask-Security
@@ -21,6 +20,7 @@ class LisaApi():
         )
 
         self.logger.info("Loaded plugins : " + str(mgr.names()))
+
 
 @app.route("/")
 @login_required

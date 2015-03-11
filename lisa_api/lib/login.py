@@ -29,5 +29,4 @@ def login_api(func):
 
 
 def custom_unauthorized(response):
-    data = {"error": "Authorization failed"}
     return jsonify({"error": "Authorization failed"}), 401

@@ -22,6 +22,7 @@ import click
 def user():
     pass
 
+
 @user.command()
 @click.argument('username', default='lisa')
 @click.option('--firstname', default='lisa', help='Firstname of the user')

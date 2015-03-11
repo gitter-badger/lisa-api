@@ -61,4 +61,3 @@ class ExtendedLoginForm(LoginForm):
             self.username.errors.append(get_message('DISABLED_ACCOUNT')[0])
             return False
         return True
-

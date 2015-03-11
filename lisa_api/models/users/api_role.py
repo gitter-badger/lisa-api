@@ -12,7 +12,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from lisa_api import db, api, core, logger
+from lisa_api import db, api, core
 from flask.ext.restplus import Resource, fields
 from .user import Role, user_datastore
 from lisa_api.lib.login import login_api
@@ -25,9 +25,9 @@ role_api = api.model('Role', {
 
 rolelist_parser = api.parser()
 rolelist_parser.add_argument('name', type=str, required=True,
-                         help='Role name (must be unique)', location='form')
+                             help='Role name (must be unique)', location='form')
 rolelist_parser.add_argument('description', type=str, required=True,
-                         help='Role description', location='form')
+                             help='Role description', location='form')
 
 role_parser = api.parser()
 role_parser.add_argument('id', type=int, required=True,
@@ -37,10 +37,12 @@ role_parser.add_argument('name', type=str, required=True,
 role_parser.add_argument('description', type=str, required=True,
                          help='Role description', location='form')
 
+
 @core.route('/role/<int:id>')
 class RoleResource(Resource):
     """ Show a single role item and lets you modify or delete it """
     decorators = [login_api]
+
     @api.doc(responses={200: 'Role object', 404: 'Role not found',
                         401: 'Unauthorized access'},
              params={'id': 'The Role ID'})
@@ -80,7 +82,7 @@ class RoleResource(Resource):
         else:
             return 'Role not found', 404
 
-    #TODO Bug on this method, swagger send a {id} instead of the true id
+    # TODO Bug on this method, swagger send a {id} instead of the true id
     @api.doc(responses={200: 'Role updated', 404: 'Role not found',
                         401: 'Unauthorized access'},
              parser=role_parser)
@@ -107,9 +109,10 @@ class RoleResource(Resource):
 
 @core.route('/role')
 class RoleListResource(Resource):
-    """ This class return all roles and is also responsible to handle the creation
-    of a role """
+    """ This class return all roles and is also responsible to handle the
+     creation of a role """
     decorators = [login_api]
+
     @api.doc(responses={200: 'Roles list', 401: 'Unauthorized access'})
     @api.marshal_list_with(role_api)
     def get(self):
@@ -132,7 +135,7 @@ class RoleListResource(Resource):
         :rtype: string + int
         """
         args = rolelist_parser.parse_args()
-        role = user_datastore.create_role(name=args['name'],
-                                          description=args['description'])
+        role = user_datastore.find_or_create_role(name=args['name'],
+                                                  description=args['description'])
         db.session.commit()
         return role, 201

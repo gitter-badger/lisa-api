@@ -70,4 +70,3 @@ core = api.namespace('core', description='CORE operations')
 
 # Create database connection object
 db = SQLAlchemy(app)
-
