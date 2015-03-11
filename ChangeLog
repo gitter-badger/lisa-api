@@ -2,6 +2,7 @@ CHANGES
 =======
 
 * fix(dev
+* fix(dev): Removing flask-script to use click instead fix(usr): CLI script is able to create a user directly from command line
 * fix(dev): Fix on api to be protected by login fix(usr): Login page is now working correctly using a correct user
 * feat(usr): Adding cli script (with default user registration)
 * feat(usr): Adding a login page to the api

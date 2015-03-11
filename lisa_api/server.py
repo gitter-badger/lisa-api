@@ -3,6 +3,8 @@ from stevedore import extension
 from .models.users import api_user
 from flask.ext.security import login_required
 from flask import redirect
+# For pyflakes
+assert api_user
 
 
 class LisaApi():

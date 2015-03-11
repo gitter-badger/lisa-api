@@ -5,3 +5,7 @@ stevedore
 flask-security
 mysqlclient
 click
+tox
+pbr
+virtualenv
+sphinx
