@@ -2,7 +2,7 @@
 lisa-api
 ===============================
 
-| |docs| |travis| |coveralls| |landscape| |scrutinizer|
+| |docs| |travis| |coveralls|
 | |version| |downloads| |wheel| |supported-versions| |supported-implementations|
 
 .. |docs| image:: https://readthedocs.org/projects/lisa-api/badge/?style=flat
@@ -16,10 +16,6 @@ lisa-api
 .. |coveralls| image:: http://img.shields.io/coveralls/project-lisa/lisa-api/master.png?style=flat
     :alt: Coverage Status
     :target: https://coveralls.io/r/project-lisa/lisa-api
-
-.. |landscape| image:: https://landscape.io/github/project-lisa/lisa-api/master/landscape.svg?style=flat
-    :target: https://landscape.io/github/project-lisa/lisa-api/master
-    :alt: Code Quality Status
 
 .. |version| image:: http://img.shields.io/pypi/v/lisa-api.png?style=flat
     :alt: PyPI Package latest release
@@ -40,10 +36,6 @@ lisa-api
 .. |supported-implementations| image:: https://pypip.in/implementation/lisa-api/badge.png?style=flat
     :alt: Supported imlementations
     :target: https://pypi.python.org/pypi/lisa-api
-
-.. |scrutinizer| image:: https://img.shields.io/scrutinizer/g/project-lisa/lisa-api/master.png?style=flat
-    :alt: Scrtinizer Status
-    :target: https://scrutinizer-ci.com/g/project-lisa/lisa-api/
 
 Lisa-api is a core component of LISA Project. It provides a REST api and execute all actions for the LISA project.
 
