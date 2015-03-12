@@ -5,17 +5,23 @@ graft ci
 graft tests
 
 include *.komodoproject
-include .bumpversion.cfg
 include .coveragerc
 include .isort.cfg
 include .pylintrc
 
-include AUTHORS.rst
-include CHANGELOG.rst
-include CONTRIBUTING.rst
 include LICENSE
-include README.rst
-
-include tox.ini .travis.yml
-
+include *.rst
+include *.txt
+include *.yml
+include *.ini
+include *.cfg
+recursive-include lisa_api *.css
+recursive-include lisa_api *.eot
+recursive-include lisa_api *.html
+recursive-include lisa_api *.otf
+recursive-include lisa_api *.py
+recursive-include lisa_api *.svg
+recursive-include lisa_api *.ttf
+recursive-include lisa_api *.woff
+recursive-include lisa_api *.woff2
 global-exclude *.py[co] __pycache__ *.so *.pyd

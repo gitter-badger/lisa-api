@@ -1,10 +1,8 @@
 CHANGES
 =======
 
-0.1
----
-
 * fix(dev
+* fix(dev): Removing few envs from travis matrix
 * fix(dev): Removing eggs from git
 * fix(dev): Adding travis and coveralls
 * fix(dev): Adding basic get login page test fix(dev): Tox is now working correctly fix(dev): Big cleanup in flakes errors
