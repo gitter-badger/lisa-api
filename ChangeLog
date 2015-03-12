@@ -2,6 +2,7 @@ CHANGES
 =======
 
 * fix(dev
+* fix(dev): Tagging a release for pbr
 * fix(dev): Removing few envs from travis matrix
 * fix(dev): Removing eggs from git
 * fix(dev): Adding travis and coveralls
