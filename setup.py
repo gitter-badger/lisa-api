@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup
-from setuptools.command.test import test as TestCommand
 import re
 import os
 import sys
@@ -69,6 +68,7 @@ setup(
     author_email='julien@lisa-project.net',  # SEE NOTE BELOW (*)
     packages=get_packages('lisa_api'),
     package_data=get_package_data('lisa_api'),
+    scripts=['lisa_api/lisa-api-cli'],
     install_requires=[],
     zip_safe=False,
     classifiers=[
