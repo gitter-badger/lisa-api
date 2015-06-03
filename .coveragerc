@@ -1,0 +1,12 @@
+[paths]
+source = lisa_api
+
+[run]
+branch = True
+source = lisa_api
+parallel = true
+
+[report]
+show_missing = true
+precision = 2
+omit = *migrations*

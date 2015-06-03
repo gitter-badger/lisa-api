@@ -1,0 +1,12 @@
+site_name: LISA API
+site_url: http://www.lisa-project.net/
+site_description: LISA - API
+
+repo_url: https://github.com/project-lisa/lisa-api
+
+#theme_dir: docs_theme
+theme_dir: mkdocs
+
+pages:
+ - ['index.md', 'Home']
+ - ['tutorial/quickstart.md', 'Tutorial', 'Quickstart']
