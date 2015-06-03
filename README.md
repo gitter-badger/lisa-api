@@ -10,7 +10,7 @@ Lisa-api is a core component of LISA Project. It provides a REST api and execute
 
 Installation
 ============
-To install the api::
+To install the api:
 
     pip install lisa-api
 
@@ -23,11 +23,11 @@ You can also play with the api by going to http://url-of-lisa:8000/
 
 Development
 ===========
-To run the server::
+To run the server:
 
-    python lisa_api/server.py
+    python [home]/lisa_api/lisa-api-cli.py
 
-To run the all tests run::
+To run the all tests run:
 
     tox
 
