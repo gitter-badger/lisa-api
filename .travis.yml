@@ -3,10 +3,11 @@ sudo: false
 env:
     - TOX_ENV=py27-flake8
     - TOX_ENV=py27-docs
-    - TOX_ENV=py34-django18,coveralls
-    - TOX_ENV=py27-django18,coveralls
-    - TOX_ENV=py27-djangomaster,coveralls
-    - TOX_ENV=py34-djangomaster,coveralls
+    - TOX_ENV=py34-django18
+    - TOX_ENV=py27-django18
+    - TOX_ENV=py27-djangomaster
+    - TOX_ENV=py34-djangomaster
+    - TOX_ENV=coveralls
 
 matrix:
   fast_finish: true
