@@ -33,12 +33,10 @@ class PluginViewSet(viewsets.ModelViewSet):
         version_str = ''
         if instance.version:
             version_str = ''.join(["==", instance.version])
-        print instance.name
-        print version_str
         pip.main(['install', 'lisa-plugins-' + instance.name + version_str])
-        print "Plugin installed"
+        print("Plugin installed")
 
     def perform_destroy(self, instance):
         pip.main(['uninstall', '--yes', 'lisa-plugins-' + instance.name])
         instance.delete()
-        print "Delete plugin"
+        print("Delete plugin")

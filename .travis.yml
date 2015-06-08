@@ -20,11 +20,6 @@ install:
 script:
   - tox -e $TOX_ENV
 
-before_script:
-  - mysql -e 'create database lisa_api;'
-  - mysql -uroot -e 'GRANT ALL PRIVILEGES ON lisa_api.* TO "lisa_api"@"localhost" IDENTIFIED BY "lisapassword";'
-  - mysql -uroot -e 'FLUSH PRIVILEGES;'
-
 notifications:
   webhooks:
     urls:
