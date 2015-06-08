@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User, Group
 from lisa_api.api.models import Plugin
 from rest_framework import viewsets
-from serializers import UserSerializer, GroupSerializer, PluginSerializer
+from lisa_api.api.serializers import UserSerializer, GroupSerializer, PluginSerializer
 import pip
 
 
