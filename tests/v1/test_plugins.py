@@ -15,7 +15,8 @@ class CoreTests(APITestCase):
         """
         url = '/api/v1/core/plugins/'
         data = {
-            'name': u'shopping'
+            'name': u'shopping',
+            'version': u'1.8.3'
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
