@@ -17,7 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from lisa_api.api import views as api_views
 from rest_framework import routers
-from lisa_api.lisa.lib import PluginManager
+from lisa_api.lisa.plugin_manager import PluginManager
 
 
 router = routers.DefaultRouter()

@@ -4,3 +4,4 @@ django
 mysqlclient
 django-rest-swagger
 stevedore
+colorlog

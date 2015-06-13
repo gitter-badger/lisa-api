@@ -3,6 +3,8 @@ from lisa_api.api.models import Plugin
 from rest_framework import viewsets
 from lisa_api.api.serializers import UserSerializer, GroupSerializer, PluginSerializer
 import pip
+import logging
+logger = logging.getLogger('lisa_api')
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -34,9 +36,9 @@ class PluginViewSet(viewsets.ModelViewSet):
         if instance.version:
             version_str = ''.join(["==", instance.version])
         pip.main(['install', 'lisa-plugins-' + instance.name + version_str])
-        print("Plugin installed")
+        logger.info(msg="Plugin installed")
 
     def perform_destroy(self, instance):
         pip.main(['uninstall', '--yes', 'lisa-plugins-' + instance.name])
         instance.delete()
-        print("Delete plugin")
+        logger.info(msg="Delete plugin")

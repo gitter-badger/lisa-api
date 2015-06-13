@@ -1,5 +1,5 @@
 from stevedore import extension
-import logging
+from lisa_api.lisa.logger import logger
 
 
 class PluginManager(object):
@@ -25,4 +25,4 @@ class PluginManager(object):
         self.plugins = mgr.names()
         for plugin in self.plugins:
             self.django_plugins.append('lisa_plugins_%s' % plugin)
-        logging.critical("Loaded plugins : %s" % self.plugins)
+        logger.info("Loaded plugins : %s" % self.plugins)
