@@ -2,9 +2,10 @@
 # import sys
 from lisa_api.lisa import configuration
 from rest_framework.test import APITestCase
-from django.core.management import call_command
+from django.core.management import call_command, ManagementUtility
 from django.test import TestCase
 from django.utils.six import StringIO
+from django.test.utils import captured_stderr
 from django.conf import settings
 
 
@@ -17,6 +18,11 @@ class CommandConfTest(TestCase):
                      settings.BASE_DIR + '/lisa_api.ini',
                      stdout=out)
         self.assertIn('Successfully saved the configuration', out.getvalue())
+
+    def test_command_configuration_error(self):
+        with captured_stderr() as stderr, self.assertRaises(SystemExit):
+            ManagementUtility(['lisa-api-cli.py', 'configuration']).execute()
+        self.assertIn("CommandError", stderr.getvalue())
 
 
 class ConfTest(APITestCase):
