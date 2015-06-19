@@ -1,10 +1,15 @@
+import os
+
+
 def pytest_configure():
     from django.conf import settings
 
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     settings.configure(
         DEBUG_PROPAGATE_EXCEPTIONS=True,
         DATABASES={'default': {'ENGINE': 'django.db.backends.sqlite3',
                                'NAME': ':memory:'}},
+        BASE_DIR=BASE_DIR,
         SITE_ID=1,
         SECRET_KEY='not very secret in tests',
         USE_I18N=True,

@@ -2,6 +2,21 @@
 # import sys
 from lisa_api.lisa import configuration
 from rest_framework.test import APITestCase
+from django.core.management import call_command
+from django.test import TestCase
+from django.utils.six import StringIO
+from django.conf import settings
+
+
+class CommandConfTest(TestCase):
+    def test_command_configuration_output(self):
+        out = StringIO()
+        call_command('configuration',
+                     '--save',
+                     '--filename',
+                     settings.BASE_DIR + '/lisa_api.ini',
+                     stdout=out)
+        self.assertIn('Successfully saved the configuration', out.getvalue())
 
 
 class ConfTest(APITestCase):
