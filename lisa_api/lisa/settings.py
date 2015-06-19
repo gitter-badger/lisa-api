@@ -12,10 +12,15 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 import os
 from lisa_api.lisa.plugin_manager import PluginManager
+from lisa_api.lisa.configuration import CONF as config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+config.load(filenames=[
+    '/etc/lisa/conf/lisa_api.ini',
+    BASE_DIR + '/lisa_api.ini',
+])
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -24,7 +29,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '!k7%j+#7j%=$qsc)b=_m-0fl5f0k-sd7y9olt=cul-q^rcko^3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
+config.add_opt(name='debug', value=True, section='api')
+DEBUG = config.api.debug
 
 ALLOWED_HOSTS = []
 
@@ -81,10 +88,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'lisa_api.lisa.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
+config.add_opt(name='name', value='lisa_api', section='database')
+config.add_opt(name='user', value='lisa_api', section='database')
+config.add_opt(name='password', value='lisapassword', section='database')
+config.add_opt(name='host', value='localhost', section='database')
+config.add_opt(name='port', value='3306', section='database')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -114,10 +125,13 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
 
 LOGGING_CONFIG = None
+
+config.add_opt(name='user', value='guest', section='rabbitmq')
+config.add_opt(name='password', value='guest', section='rabbitmq')
+config.add_opt(name='host', value='localhost', section='rabbitmq')

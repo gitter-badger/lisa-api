@@ -5,3 +5,5 @@ mysqlclient
 django-rest-swagger
 stevedore
 colorlog
+six
+kombu

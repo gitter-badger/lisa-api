@@ -41,6 +41,11 @@ LOGGING = {
         'lisa_api': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG'
+        },
+
+        'django.request': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG'
         }
     }
 }
