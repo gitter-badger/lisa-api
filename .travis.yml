@@ -18,7 +18,7 @@ matrix:
     - env: TOX_ENV=py34-djangomaster
 
 install:
-  - pip install tox
+  - pip install tox coveralls
 
 script:
   - tox -e $TOX_ENV
