@@ -35,6 +35,7 @@ DEBUG = config.api.debug
 
 ALLOWED_HOSTS = []
 
+config.add_opt(name='tts', value='google', section='api')
 
 # Application definition
 

@@ -1,11 +1,14 @@
 from django.contrib.auth.models import User, Group
+from django.http import HttpResponse
 from lisa_api.api.models import Plugin
-from rest_framework import viewsets
-from lisa_api.api.serializers import UserSerializer, GroupSerializer, PluginSerializer, SpeakSerializer
-from rest_framework.decorators import api_view
+from lisa_api.lisa.configuration import CONF as config
+from rest_framework import viewsets, permissions
+from lisa_api.api.serializers import UserSerializer, GroupSerializer, PluginSerializer, SpeakSerializer, TTSSerializer
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from lisa_api.api.speak import send_message
+from stevedore import driver
 import pip
 import logging
 logger = logging.getLogger('lisa_api')
@@ -64,3 +67,38 @@ def SpeakView(request, format=None):
                          source=serializer.data.get('source'))
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST', 'GET'])
+@permission_classes([permissions.AllowAny])
+def TTSView(request, format=None):
+    """
+    API endpoint that allows to do text to speech.
+    ---
+    request_serializer: TTSSerializer
+    response_serializer: TTSSerializer
+    """
+    if request.method == "POST":
+        serializer = TTSSerializer(data=request.data)
+    else:
+        serializer = TTSSerializer(data=request.GET)
+    if serializer.is_valid():
+        if serializer.data.get('driver'):
+            tts = serializer.data.get('driver')
+        else:
+            tts = config.api.tts
+
+        mgr = driver.DriverManager(
+            namespace='lisa.api.tts',
+            name=tts,
+            invoke_on_load=True,
+        )
+        sound = mgr.driver.convert(message=serializer.data.get('message'),
+                                   lang=serializer.data.get('lang'))
+        if sound:
+            return HttpResponse(sound,
+                                content_type="audio/mpeg")
+        else:
+            return Response('',
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

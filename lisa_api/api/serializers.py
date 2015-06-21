@@ -28,3 +28,12 @@ class SpeakSerializer(serializers.Serializer):
 
     class Meta:
         fields = ('zone', 'message', 'source')
+
+
+class TTSSerializer(serializers.Serializer):
+    message = serializers.CharField(required=True, allow_blank=False)
+    lang = serializers.CharField(required=False, allow_blank=True, max_length=5)
+    driver = serializers.CharField(required=False, allow_blank=True, max_length=50)
+
+    class Meta:
+        fields = ('message', 'lang', 'driver')

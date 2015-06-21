@@ -30,6 +30,7 @@ router.register(r'plugins', api_views.PluginViewSet)
 urlpatterns = [
     url(r'^api/v1/core/', include(router.urls)),
     url(r'^api/v1/core/speak/', api_views.SpeakView),
+    url(r'^api/v1/core/tts/', api_views.TTSView),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^docs/', include('rest_framework_swagger.urls')),

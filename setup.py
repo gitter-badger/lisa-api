@@ -83,7 +83,14 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4'
-    ]
+    ],
+    entry_points={
+        'lisa.api.tts': [
+            'pico = lisa_api.api.tts.pico:Pico',
+            'google = lisa_api.api.tts.google:Google',
+        ]
+    },
+
 )
 
 # (*) Please direct queries to the discussion group, rather than to me directly

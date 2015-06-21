@@ -41,13 +41,19 @@ class ConfTest(APITestCase):
         self.assertTrue(configuration.CONF.parser)
         self.assertTrue(isinstance(configuration.CONF, configuration.Config))
 
-    def test_load(self):  # mock_pop_cache, mock_read):
+    def test_load(self):
         self.CONF.load('filename')
         self.assertTrue('filename', self.CONF._filename)
 
     def test_save_with_filename(self):
         self.CONF.save('filename')
         self.assertTrue('filename', self.CONF._filename)
+
+    """
+    def test_save_with_no_filename(self):
+        self.CONF.save()
+        self.assertTrue('filename', self.CONF._filename)
+    """
 
     def test_add_opt_no_section(self):
         self.CONF.add_opt('fake', 'val')
