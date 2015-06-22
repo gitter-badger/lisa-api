@@ -21,23 +21,18 @@ class PluginSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'name', 'version')
 
 
+class ClientSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Client
+        fields = ('url', 'name', 'mac', 'zones')
+
+
 class ZoneSerializer(serializers.HyperlinkedModelSerializer):
-    clients = serializers.HyperlinkedRelatedField(many=True, view_name='clients', read_only=True)
+    clients = ClientSerializer(many=True, read_only=True)
 
     class Meta:
         model = Zone
         fields = ('url', 'name', 'clients')
-
-
-class ClientSerializer(serializers.HyperlinkedModelSerializer):
-    zone = serializers.HyperlinkedRelatedField(
-        queryset=Zone.objects.all(),
-        view_name='zones'
-    )
-
-    class Meta:
-        model = Client
-        fields = ('url', 'name', 'mac', 'zone')
 
 
 class SpeakSerializer(serializers.Serializer):

@@ -16,7 +16,7 @@ class CoreTests(APITestCase):
         data = {
             'name': u'rpi-bathroom',
             'mac': u'00:11:22:33:44:55',
-            'zone': [self.zone_bathroom_url]
+            'zones': [self.zone_bathroom_url]
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
