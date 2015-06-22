@@ -1,9 +1,12 @@
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponse
-from lisa_api.api.models import Plugin
+from lisa_api.api.models import Plugin, Client, Zone
 from lisa_api.lisa.configuration import CONF as config
 from rest_framework import viewsets, permissions
-from lisa_api.api.serializers import UserSerializer, GroupSerializer, PluginSerializer, SpeakSerializer, TTSSerializer
+from lisa_api.api.serializers import (UserSerializer, GroupSerializer,
+                                      PluginSerializer, SpeakSerializer,
+                                      TTSSerializer, ClientSerializer,
+                                      ZoneSerializer)
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -28,6 +31,22 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+
+class ZoneViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows zones to be viewed or edited.
+    """
+    queryset = Zone.objects.all()
+    serializer_class = ZoneSerializer
+
+
+class ClientViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows clients to be viewed or edited.
+    """
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
 
 
 class PluginViewSet(viewsets.ModelViewSet):
