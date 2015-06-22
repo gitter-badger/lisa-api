@@ -1,6 +1,5 @@
 from lisa_api.api.tts import base
-from subprocess import call
-from pydub import AudioSegment
+import subprocess
 import tempfile
 import logging
 logger = logging.getLogger('lisa_api')
@@ -23,23 +22,22 @@ class Pico(base.TTSBase):
 
         tempwav = tempfile.NamedTemporaryFile(suffix=".wav")
         tempmp3 = tempfile.NamedTemporaryFile(suffix=".mp3")
-        print lang
 
         if 'en' in lang:
             language = 'en-US'
         else:
             language = '-'.join([str(lang), str(lang).upper()])
-        command = ['pico2wave', '-w', tempwav.name, '-l', language, '--', message]
         try:
-            logger.debug("Command used to generate the sound : %s in the file %s" % (command, tempwav.name))
-            call(command)
-        except OSError:
-            logger.err('OSError exception')
+            commandwav = ['pico2wave', '-w', tempwav.name, '-l', language, '--', message]
+            logger.debug("Command used to generate the wav sound : %s in the file %s" % (commandwav, tempwav.name))
+            logger.debug(subprocess.check_output(commandwav, stderr=subprocess.STDOUT))
+            commandmp3 = ['avconv', '-y', '-f', 'wav', '-i', tempwav.name, '-b:a', '256k', '-f', 'mp3', tempmp3.name]
+            logger.debug("Command used to generate the mp3 sound : %s in the file %s" % (commandmp3, tempmp3.name))
+            logger.debug(subprocess.check_output(commandmp3, stderr=subprocess.STDOUT))
+        except subprocess.CalledProcessError:
+            logger.error('Problem generating sound')
             return False
-
-        sound = AudioSegment.from_wav(tempwav.name)
-        sound.export(tempmp3, format="mp3", bitrate="256k")
-        tempwav.close()
         combined_sound.append(tempmp3.read())
+        tempwav.close()
         tempmp3.close()
         return ''.join(combined_sound)

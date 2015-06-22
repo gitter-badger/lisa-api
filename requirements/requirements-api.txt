@@ -7,5 +7,4 @@ stevedore
 colorlog
 six
 kombu
-pydub
 requests
