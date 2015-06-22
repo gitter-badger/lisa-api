@@ -53,7 +53,7 @@ class Google(base.TTSBase):
                     lang, val, len(combined_text), idx), headers=headers)
                 combined_sound.append(r.content)
         except:
-            logger.err('There was an error with google TTS')
+            logger.error('There was an error with google TTS')
             return False
 
         return ''.join(combined_sound)

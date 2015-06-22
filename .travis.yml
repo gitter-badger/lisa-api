@@ -19,6 +19,7 @@ matrix:
 
 install:
   - pip install tox coveralls
+  - sudo apt-get install libav-tools libttspico-data libttspico-utils
 
 script:
   - tox -e $TOX_ENV

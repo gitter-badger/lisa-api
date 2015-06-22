@@ -23,7 +23,12 @@ class Pico(base.TTSBase):
 
         tempwav = tempfile.NamedTemporaryFile(suffix=".wav")
         tempmp3 = tempfile.NamedTemporaryFile(suffix=".mp3")
-        language = '-'.join([str(lang), str(lang).upper()])
+        print lang
+
+        if 'en' in lang:
+            language = 'en-US'
+        else:
+            language = '-'.join([str(lang), str(lang).upper()])
         command = ['pico2wave', '-w', tempwav.name, '-l', language, '--', message]
         try:
             logger.debug("Command used to generate the sound : %s in the file %s" % (command, tempwav.name))
