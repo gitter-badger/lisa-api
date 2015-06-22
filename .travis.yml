@@ -1,5 +1,4 @@
 language: python
-sudo: false
 env:
     - TOX_ENV=py27-flake8
     - TOX_ENV=py27-docs
@@ -17,9 +16,12 @@ matrix:
     - env: TOX_ENV=py27-djangomaster
     - env: TOX_ENV=py34-djangomaster
 
+before_script:
+  - sudo apt-get update -qq
+  - sudo apt-get install libav-tools libttspico-data libttspico-utils
+
 install:
   - pip install tox coveralls
-  - apt-get install libav-tools libttspico-data libttspico-utils
 
 script:
   - tox -e $TOX_ENV
