@@ -21,9 +21,11 @@ from lisa_api.lisa.plugin_manager import PluginManager
 
 
 router = routers.DefaultRouter()
-router.register(r'users', api_views.UserViewSet)
+router.register(r'clients', api_views.ClientViewSet)
 router.register(r'groups', api_views.GroupViewSet)
 router.register(r'plugins', api_views.PluginViewSet)
+router.register(r'users', api_views.UserViewSet)
+router.register(r'zones', api_views.ZoneViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

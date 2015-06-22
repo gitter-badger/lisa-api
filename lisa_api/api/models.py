@@ -13,4 +13,4 @@ class Zone(models.Model):
 class Client(models.Model):
     name = models.CharField(max_length=100, unique=True)
     mac = models.CharField(max_length=100, unique=True, null=True)
-    zone = models.ForeignKey(Zone)
+    zones = models.ManyToManyField(Zone, related_name='clients')

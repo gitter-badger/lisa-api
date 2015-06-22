@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from lisa_api.api.models import Plugin
+from lisa_api.api.models import Plugin, Client, Zone
 from rest_framework import serializers
 
 
@@ -19,6 +19,20 @@ class PluginSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Plugin
         fields = ('url', 'name', 'version')
+
+
+class ClientSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Client
+        fields = ('url', 'name', 'mac', 'zones')
+
+
+class ZoneSerializer(serializers.HyperlinkedModelSerializer):
+    clients = ClientSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Zone
+        fields = ('url', 'name', 'clients')
 
 
 class SpeakSerializer(serializers.Serializer):
