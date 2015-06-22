@@ -36,7 +36,7 @@ class Pico(base.TTSBase):
             logger.debug(subprocess.check_output(commandmp3, stderr=subprocess.STDOUT))
         except subprocess.CalledProcessError as error:
             logger.error('Problem generating sound')
-            logger.debug('Output : %s' % error.output)
+            logger.debug('Output : %s' % str(error.output))
             return False
         combined_sound.append(tempmp3.read())
         tempwav.close()
