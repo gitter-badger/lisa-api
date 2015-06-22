@@ -41,4 +41,4 @@ class Pico(base.TTSBase):
         combined_sound.append(tempmp3.read())
         tempwav.close()
         tempmp3.close()
-        return ''.join(combined_sound)
+        return b"".join(combined_sound)
