@@ -48,6 +48,15 @@ class CoreTests(APITestCase):
         response = self.client.get(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_v1_tts_get_bad_driver(self):
+        """
+        Ensure we can send a message to tts
+        """
+        url = '/api/v1/core/tts/'
+        data = {'message': u'bonjour', 'lang': 'en', 'driver': 'test'}
+        response = self.client.get(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     def test_v1_tts_bad_request(self):
         """
         Ensure parameters are mandatory
