@@ -107,17 +107,21 @@ def TTSView(request, format=None):
         else:
             tts = config.api.tts
 
-        mgr = driver.DriverManager(
-            namespace='lisa.api.tts',
-            name=tts,
-            invoke_on_load=True,
-        )
-        sound = mgr.driver.convert(message=serializer.data.get('message'),
-                                   lang=serializer.data.get('lang'))
-        if sound:
-            return HttpResponse(sound,
-                                content_type="audio/mpeg")
-        else:
-            return Response('',
+        try:
+            mgr = driver.DriverManager(
+                namespace='lisa.api.tts',
+                name=tts,
+                invoke_on_load=True,
+            )
+            sound = mgr.driver.convert(message=serializer.data.get('message'),
+                                       lang=serializer.data.get('lang'))
+            if sound:
+                return HttpResponse(sound,
+                                    content_type="audio/mpeg")
+            else:
+                return Response('',
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except RuntimeError:
+            return Response('Driver %s not found' % tts,
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
