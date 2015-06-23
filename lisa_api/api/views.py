@@ -13,8 +13,7 @@ from rest_framework import status
 from lisa_api.api.speak import send_message
 from stevedore import driver
 import pip
-import logging
-logger = logging.getLogger('lisa_api')
+from lisa_api.lisa.logger import logger
 
 
 class UserViewSet(viewsets.ModelViewSet):

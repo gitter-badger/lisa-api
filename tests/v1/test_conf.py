@@ -1,7 +1,6 @@
-# import mock
-# import sys
+import mock
+import sys
 from lisa_api.lisa import configuration
-from rest_framework.test import APITestCase
 from django.core.management import call_command, ManagementUtility
 from django.test import TestCase
 from django.utils.six import StringIO
@@ -25,7 +24,7 @@ class CommandConfTest(TestCase):
         self.assertIn("CommandError", stderr.getvalue())
 
 
-class ConfTest(APITestCase):
+class ConfTest(TestCase):
     def setUp(self):
         super(ConfTest, self).setUp()
         # We need to reset the CONF object for each test
@@ -41,19 +40,18 @@ class ConfTest(APITestCase):
         self.assertTrue(configuration.CONF.parser)
         self.assertTrue(isinstance(configuration.CONF, configuration.Config))
 
-    def test_load(self):
-        self.CONF.load('filename')
-        self.assertTrue('filename', self.CONF._filename)
+    @mock.patch.object(configuration.Config, '_populate_cache')
+    @mock.patch.object(configuration.configparser.SafeConfigParser, 'read')
+    def test_load(self, mock_read, mock_pop_cache):
+        self.CONF.load(settings.BASE_DIR + '/lisa_api.ini')
+        self.assertTrue(settings.BASE_DIR + '/lisa_api.ini', self.CONF._filename)
+        mock_read.assert_called_once_with(settings.BASE_DIR + '/lisa_api.ini')
+        mock_pop_cache.assert_called_once_with()
 
-    def test_save_with_filename(self):
-        self.CONF.save('filename')
-        self.assertTrue('filename', self.CONF._filename)
-
-    """
-    def test_save_with_no_filename(self):
-        self.CONF.save()
-        self.assertTrue('filename', self.CONF._filename)
-    """
+    @mock.patch.object(configuration.configparser.SafeConfigParser, 'write')
+    def test_save_with_filename(self, mock_write):
+        self.CONF.save(settings.BASE_DIR + '/lisa_api.ini')
+        mock_write.assert_called_once_with(settings.BASE_DIR + '/lisa_api.ini')
 
     def test_add_opt_no_section(self):
         self.CONF.add_opt('fake', 'val')

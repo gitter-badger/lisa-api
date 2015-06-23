@@ -14,9 +14,9 @@
 
 import collections
 import sys
-import os
 import six
 from six.moves import configparser
+from lisa_api.lisa.logger import logger
 
 _TRUE = ['True']
 _FALSE = ['False']
@@ -56,18 +56,14 @@ class Config(object):
             self._cached.setdefault(None, {}).update({def_opt: casted})
 
     def load(self, filenames):
-        """Import the configuration from the first readable configuration file."""
-        for filename in filenames:
-            if os.access(filename, os.R_OK):
-                self._filename = filename
-                self.parser.read(filename)
-                self._populate_cache()
-                break
+        """Import the configuration from a list of configuration files."""
+        logger.debug("Loading files %s" % str(filenames))
+        self._filename = filenames
+        self.parser.read(filenames)
+        self._populate_cache()
 
     def save(self, filename=None):
         """Persists configuration into a file or stdout."""
-        if filename is None:
-            filename = self._filename or sys.stdout
         with open(filename, 'wb') as configfile:
             self.parser.write(configfile)
 
