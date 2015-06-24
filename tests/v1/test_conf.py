@@ -50,7 +50,7 @@ class ConfTest(TestCase):
     @mock.patch.object(configuration.configparser.SafeConfigParser, 'write')
     def test_save_with_filename(self, mock_write):
         m = mock.mock_open()
-        with mock.patch('__builtin__.open', m, create=True):
+        with mock.patch('six.moves.builtins.open', m, create=True):
             self.CONF.add_opt(name='test', value='test', section='test')
             self.CONF.save(settings.BASE_DIR + '/lisa_api.ini')
             m.assert_called_once_with(settings.BASE_DIR + '/lisa_api.ini', 'wb')
