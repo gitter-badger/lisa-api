@@ -51,7 +51,11 @@ class Google(base.TTSBase):
                            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.63 Safari/537.36"}
                 r = requests.get("https://translate.google.com/translate_tts?ie=UTF-8&tl=%s&q=%s&total=%s&idx=%s&client=t&prev=input" % (
                     lang, val, len(combined_text), idx), headers=headers)
-                combined_sound.append(r.content)
+                if r.status_code is not requests.codes.ok:
+                    logger.error('There was an error with google TTS')
+                    return False
+                else:
+                    combined_sound.append(r.content)
         except:
             logger.error('There was an error with google TTS')
             return False
