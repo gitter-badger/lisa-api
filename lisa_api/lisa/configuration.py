@@ -13,7 +13,6 @@
 # under the License.
 
 import collections
-import sys
 import six
 from six.moves import configparser
 from lisa_api.lisa.logger import logger
