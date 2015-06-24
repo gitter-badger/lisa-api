@@ -1,5 +1,4 @@
 import mock
-import sys
 from lisa_api.lisa import configuration
 from django.core.management import call_command, ManagementUtility
 from django.test import TestCase
@@ -50,8 +49,12 @@ class ConfTest(TestCase):
 
     @mock.patch.object(configuration.configparser.SafeConfigParser, 'write')
     def test_save_with_filename(self, mock_write):
-        self.CONF.save(settings.BASE_DIR + '/lisa_api.ini')
-        mock_write.assert_called_once_with(settings.BASE_DIR + '/lisa_api.ini')
+        m = mock.mock_open()
+        with mock.patch('__builtin__.open', m, create=True):
+            self.CONF.add_opt(name='test', value='test', section='test')
+            self.CONF.save(settings.BASE_DIR + '/lisa_api.ini')
+            m.assert_called_once_with(settings.BASE_DIR + '/lisa_api.ini', 'wb')
+            mock_write.assert_called_once_with(m())
 
     def test_add_opt_no_section(self):
         self.CONF.add_opt('fake', 'val')
