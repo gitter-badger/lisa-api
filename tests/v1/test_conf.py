@@ -1,21 +1,23 @@
-# import mock
-# import sys
+import mock
+import tempfile
 from lisa_api.lisa import configuration
-from rest_framework.test import APITestCase
 from django.core.management import call_command, ManagementUtility
 from django.test import TestCase
 from django.utils.six import StringIO
 from django.test.utils import captured_stderr
-from django.conf import settings
 
 
 class CommandConfTest(TestCase):
+    def setUp(self):
+        super(CommandConfTest, self).setUp()
+        self.lisa_configfile = tempfile.NamedTemporaryFile(suffix='.ini').name
+
     def test_command_configuration_output(self):
         out = StringIO()
         call_command('configuration',
                      '--save',
                      '--filename',
-                     settings.BASE_DIR + '/lisa_api.ini',
+                     self.lisa_configfile,
                      stdout=out)
         self.assertIn('Successfully saved the configuration', out.getvalue())
 
@@ -25,11 +27,12 @@ class CommandConfTest(TestCase):
         self.assertIn("CommandError", stderr.getvalue())
 
 
-class ConfTest(APITestCase):
+class ConfTest(TestCase):
     def setUp(self):
         super(ConfTest, self).setUp()
         # We need to reset the CONF object for each test
         self.CONF = configuration.Config()
+        self.lisa_configfile = tempfile.NamedTemporaryFile(suffix='.ini').name
 
     def test_init(self):
         config = configuration.Config()
@@ -41,19 +44,22 @@ class ConfTest(APITestCase):
         self.assertTrue(configuration.CONF.parser)
         self.assertTrue(isinstance(configuration.CONF, configuration.Config))
 
-    def test_load(self):
-        self.CONF.load('filename')
-        self.assertTrue('filename', self.CONF._filename)
+    @mock.patch.object(configuration.Config, '_populate_cache')
+    @mock.patch.object(configuration.configparser.SafeConfigParser, 'read')
+    def test_load(self, mock_read, mock_pop_cache):
+        self.CONF.load(self.lisa_configfile)
+        self.assertTrue(self.lisa_configfile, self.CONF._filename)
+        mock_read.assert_called_once_with(self.lisa_configfile)
+        mock_pop_cache.assert_called_once_with()
 
-    def test_save_with_filename(self):
-        self.CONF.save('filename')
-        self.assertTrue('filename', self.CONF._filename)
-
-    """
-    def test_save_with_no_filename(self):
-        self.CONF.save()
-        self.assertTrue('filename', self.CONF._filename)
-    """
+    @mock.patch.object(configuration.configparser.SafeConfigParser, 'write')
+    def test_save_with_filename(self, mock_write):
+        m = mock.mock_open()
+        with mock.patch('six.moves.builtins.open', m, create=True):
+            self.CONF.add_opt(name='test', value='test', section='test')
+            self.CONF.save(self.lisa_configfile)
+            m.assert_called_once_with(self.lisa_configfile, 'wb')
+            mock_write.assert_called_once_with(m())
 
     def test_add_opt_no_section(self):
         self.CONF.add_opt('fake', 'val')
