@@ -36,6 +36,7 @@ DEBUG = config.api.debug
 ALLOWED_HOSTS = []
 
 config.add_opt(name='tts', value='google', section='api')
+config.add_opt(name='speak', value='rabbitmq', section='api')
 
 # Application definition
 

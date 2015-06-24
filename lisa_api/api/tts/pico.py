@@ -1,8 +1,7 @@
 from lisa_api.api.tts import base
 import subprocess
 import tempfile
-import logging
-logger = logging.getLogger('lisa_api')
+from lisa_api.lisa.logger import logger
 
 
 class Pico(base.TTSBase):

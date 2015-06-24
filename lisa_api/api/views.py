@@ -10,10 +10,9 @@ from lisa_api.api.serializers import (UserSerializer, GroupSerializer,
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-from lisa_api.api.speak import send_message
 from stevedore import driver
-import pip
 from lisa_api.lisa.logger import logger
+import pip
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -80,11 +79,28 @@ def SpeakView(request, format=None):
     if request.method == 'POST':
         serializer = SpeakSerializer(data=request.data)
         if serializer.is_valid():
-            send_message(message=serializer.data.get('message'),
-                         zone=serializer.data.get('zone'),
-                         source=serializer.data.get('source'))
-            return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            if serializer.data.get('driver'):
+                speak = serializer.data.get('driver')
+            else:
+                speak = config.api.speak
+            try:
+                mgr = driver.DriverManager(
+                    namespace='lisa.api.speak',
+                    name=speak,
+                    invoke_on_load=True,
+                )
+                message = mgr.driver.send_message(message=serializer.data.get('message'),
+                                                  zone=serializer.data.get('zone'),
+                                                  source=serializer.data.get('source'))
+                if message:
+                    return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except RuntimeError:
+                return Response('Driver %s not found' % speak,
+                                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST', 'GET'])
