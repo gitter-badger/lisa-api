@@ -9,6 +9,7 @@ class CoreTests(APITestCase):
         config.add_opt(name='user', value='guest', section='rabbitmq')
         config.add_opt(name='password', value='guest', section='rabbitmq')
         config.add_opt(name='host', value='localhost', section='rabbitmq')
+        config.add_opt(name='speak', value='rabbitmq', section='api')
 
     def test_v1_speak_without_zone(self):
         """
@@ -27,6 +28,24 @@ class CoreTests(APITestCase):
         data = {'message': u'test', 'zone': u'test', 'source': 'test'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+
+    def test_v1_speak_with_driver(self):
+        """
+        Ensure we can send a message to rabbitmq
+        """
+        url = '/api/v1/core/speak/'
+        data = {'message': u'test', 'zone': u'test', 'source': 'test', 'driver': 'rabbitmq'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+
+    def test_v1_speak_bad_driver(self):
+        """
+        Ensure we can send a message to rabbitmq
+        """
+        url = '/api/v1/core/speak/'
+        data = {'message': u'test', 'zone': u'test', 'source': 'test', 'driver': 'test'}
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def test_v1_speak_bad_request(self):
         """

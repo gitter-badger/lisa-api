@@ -88,7 +88,11 @@ setup(
         'lisa.api.tts': [
             'pico = lisa_api.api.tts.pico:Pico',
             'google = lisa_api.api.tts.google:Google',
+        ],
+        'lisa.api.speak': [
+            'rabbitmq = lisa_api.api.speak.rabbitmq:Rabbitmq',
         ]
+
     },
 
 )

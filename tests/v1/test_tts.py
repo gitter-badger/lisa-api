@@ -1,10 +1,15 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
+from lisa_api.lisa.configuration import CONF as config
 import responses
 import re
 
 
 class CoreTests(APITestCase):
+    def setUp(self):
+        super(CoreTests, self).setUp()
+        config.add_opt(name='tts', value='pico', section='api')
+
     @responses.activate
     def test_v1_tts_post_google(self):
         """
@@ -78,6 +83,15 @@ class CoreTests(APITestCase):
         data = {'message': u'bonjour', 'lang': 'en', 'driver': 'pico'}
         response = self.client.get(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_v1_tts_get_pico_bad_lang(self):
+        """
+        Ensure we can send a message to tts
+        """
+        url = '/api/v1/core/tts/'
+        data = {'message': u'bonjour', 'lang': 'test'}
+        response = self.client.get(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def test_v1_tts_get_bad_driver(self):
         """
