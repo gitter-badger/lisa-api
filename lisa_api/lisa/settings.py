@@ -68,6 +68,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 )
 
 ROOT_URLCONF = 'lisa_api.lisa.urls'
@@ -101,11 +102,11 @@ config.add_opt(name='port', value='3306', section='database')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'lisa_api',
-        'USER': 'lisa_api',
-        'PASSWORD': 'lisapassword',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'NAME': config.database.name,
+        'USER': config.database.user,
+        'PASSWORD': config.database.password,
+        'HOST': config.database.host,
+        'PORT': config.database.port,
     }
 }
 
@@ -117,7 +118,8 @@ REST_FRAMEWORK = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+config.add_opt(name='lang_django', value='en-us', section='api')
+LANGUAGE_CODE = config.api.lang_django
 
 TIME_ZONE = 'UTC'
 
@@ -137,3 +139,6 @@ LOGGING_CONFIG = None
 config.add_opt(name='user', value='guest', section='rabbitmq')
 config.add_opt(name='password', value='guest', section='rabbitmq')
 config.add_opt(name='host', value='localhost', section='rabbitmq')
+
+LOGIN_REDIRECT_URL = '/docs/'
+LOGIN_URL = '/api-auth/login/'

@@ -69,7 +69,18 @@ setup(
     packages=get_packages('lisa_api'),
     package_data=get_package_data('lisa_api'),
     scripts=['lisa_api/lisa-api-cli'],
-    install_requires=[],
+    install_requires=[
+        'pip==1.5.6',
+        'djangorestframework',
+        'django>=1.8',
+        'mysqlclient',
+        'django-rest-swagger',
+        'stevedore',
+        'colorlog',
+        'six',
+        'kombu',
+        'requests'
+    ],
     zip_safe=False,
     classifiers=[
         'Environment :: Console',

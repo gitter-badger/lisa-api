@@ -39,4 +39,4 @@ urlpatterns = [
 ]
 
 for plugin in PluginManager().plugins:
-        urlpatterns.append(url(r'^api/v1/plugin-%s' % plugin, include('lisa_plugins_%s.urls' % plugin, namespace=plugin)))
+        urlpatterns.append(url(r'^api/v1/plugin-%s' % plugin, include('lisa_plugins_%s.urls' % plugin)))
