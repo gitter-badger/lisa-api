@@ -8,3 +8,4 @@ colorlog
 six
 kombu
 requests
+cookiecutter

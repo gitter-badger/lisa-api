@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from stevedore import driver
 from lisa_api.lisa.logger import logger
+from django.utils.translation import ugettext as _
 import pip
 
 
@@ -97,7 +98,7 @@ def SpeakView(request, format=None):
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             except RuntimeError:
-                return Response('Driver %s not found' % speak,
+                return Response(_('Driver {speak} not found').format(speak=speak),
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -137,6 +138,6 @@ def TTSView(request, format=None):
                 return Response('',
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except RuntimeError:
-            return Response('Driver %s not found' % tts,
+            return Response(_('Driver {tts} not found').format(tts=tts),
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

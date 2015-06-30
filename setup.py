@@ -79,7 +79,8 @@ setup(
         'colorlog',
         'six',
         'kombu',
-        'requests'
+        'requests',
+        'cookiecutter'
     ],
     zip_safe=False,
     classifiers=[
