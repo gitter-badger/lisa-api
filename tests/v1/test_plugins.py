@@ -5,14 +5,18 @@ from django.core.management import call_command, ManagementUtility
 from django.test import TestCase
 from django.utils.six import StringIO
 from django.test.utils import captured_stderr
-from cookiecutter import main as cookiecutter
 import mock
-import sys
+
+
+class fakecookie(object):
+    class main():
+        def cookiecutter():
+            raise NotImplementedError
+
 
 class CommandPluginTest(TestCase):
-    @mock.patch('cookiecutter.main.cookiecutter')
-    @mock.patch('sys.stdin')
-    def test_command_plugin_output(self, mock_cookiecutter, mock_stdin):
+    @mock.patch('lisa_api.api.management.commands.plugins.cookiecutter')
+    def test_command_plugin_output(self, mock_cookiecutter):
         out = StringIO()
         call_command('plugins',
                      '--create',
