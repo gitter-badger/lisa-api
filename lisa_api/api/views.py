@@ -56,6 +56,7 @@ class IntentViewSet(viewsets.ModelViewSet):
     serializer_class = IntentSerializer
     lookup_field = 'name'
 
+
 class PluginViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows plugins to be viewed or edited.
