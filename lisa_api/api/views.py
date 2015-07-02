@@ -1,12 +1,12 @@
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponse
-from lisa_api.api.models import Plugin, Client, Zone
+from lisa_api.api.models import Plugin, Client, Zone, Intent
 from lisa_api.lisa.configuration import CONF as config
 from rest_framework import viewsets, permissions
 from lisa_api.api.serializers import (UserSerializer, GroupSerializer,
                                       PluginSerializer, SpeakSerializer,
                                       TTSSerializer, ClientSerializer,
-                                      ZoneSerializer)
+                                      ZoneSerializer, IntentSerializer)
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
@@ -47,6 +47,14 @@ class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
 
+
+class IntentViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows intents to be viewed or edited.
+    """
+    queryset = Intent.objects.all()
+    serializer_class = IntentSerializer
+    lookup_field = 'name'
 
 class PluginViewSet(viewsets.ModelViewSet):
     """

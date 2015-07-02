@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from lisa_api.api.models import Plugin, Client, Zone
+from lisa_api.api.models import Plugin, Client, Zone, Intent
 from rest_framework import serializers
 
 
@@ -19,6 +19,15 @@ class PluginSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Plugin
         fields = ('url', 'name', 'version')
+
+
+class IntentSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Intent
+        fields = ('url', 'name', 'method', 'api_url')
+        extra_kwargs = {
+            'url': {'lookup_field': 'name'}
+        }
 
 
 class ClientSerializer(serializers.HyperlinkedModelSerializer):

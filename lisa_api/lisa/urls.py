@@ -23,6 +23,7 @@ from lisa_api.lisa.plugin_manager import PluginManager
 router = routers.DefaultRouter()
 router.register(r'clients', api_views.ClientViewSet)
 router.register(r'groups', api_views.GroupViewSet)
+router.register(r'intents', api_views.IntentViewSet)
 router.register(r'plugins', api_views.PluginViewSet)
 router.register(r'users', api_views.UserViewSet)
 router.register(r'zones', api_views.ZoneViewSet)

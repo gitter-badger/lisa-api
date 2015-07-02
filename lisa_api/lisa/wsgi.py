@@ -15,5 +15,9 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lisa_api.lisa.settings")
 
 application = get_wsgi_application()
 
+from lisa_api.lisa.plugin_manager import PluginManager
 from django.core.management import call_command
+
 call_command("migrate")
+PM = PluginManager()
+PM.load_intents()
