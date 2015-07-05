@@ -31,5 +31,11 @@ class PluginManager(object):
         logger.info("Loaded plugins : %s" % self.plugins)
 
     def load_intents(self):
-        logger.info("Adding intents to database")
-        self.mgr.map(self.intents)
+        if self.plugins:
+            logger.info("Adding intents to database")
+            try:
+                self.mgr.map(self.intents)
+            except RuntimeError:
+                logger.info("There was a problem loading plugins intents")
+        else:
+            logger.info("There is no plugin loaded")
