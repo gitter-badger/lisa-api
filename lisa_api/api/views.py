@@ -1,17 +1,18 @@
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponse
-from lisa_api.api.models import Plugin, Client, Zone
+from lisa_api.api.models import Plugin, Client, Zone, Intent
 from lisa_api.lisa.configuration import CONF as config
 from rest_framework import viewsets, permissions
 from lisa_api.api.serializers import (UserSerializer, GroupSerializer,
                                       PluginSerializer, SpeakSerializer,
                                       TTSSerializer, ClientSerializer,
-                                      ZoneSerializer)
+                                      ZoneSerializer, IntentSerializer)
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from stevedore import driver
 from lisa_api.lisa.logger import logger
+from django.utils.translation import ugettext as _
 import pip
 
 
@@ -45,6 +46,15 @@ class ClientViewSet(viewsets.ModelViewSet):
     """
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
+
+
+class IntentViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows intents to be viewed or edited.
+    """
+    queryset = Intent.objects.all()
+    serializer_class = IntentSerializer
+    lookup_field = 'name'
 
 
 class PluginViewSet(viewsets.ModelViewSet):
@@ -97,7 +107,7 @@ def SpeakView(request, format=None):
                 else:
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             except RuntimeError:
-                return Response('Driver %s not found' % speak,
+                return Response(_('Driver {speak} not found').format(speak=speak),
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -137,6 +147,6 @@ def TTSView(request, format=None):
                 return Response('',
                                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except RuntimeError:
-            return Response('Driver %s not found' % tts,
+            return Response(_('Driver {tts} not found').format(tts=tts),
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

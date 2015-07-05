@@ -1,9 +1,13 @@
 site_name: LISA API
-site_url: http://www.lisa-project.net/
+site_url: http://api.docs.lisa-project.net/
 site_description: LISA - API
 
 repo_url: https://github.com/project-lisa/lisa-api
 
 pages:
- - ['index.md', 'Home']
- - ['tutorial/quickstart.md', 'Tutorial', 'Quickstart']
+ - Home: 'index.md'
+ - Tutorial:
+    - 'Quickstart': 'tutorial/quickstart.md'
+ - Topics:
+     - 'Internationalization': 'topics/internationalization.md'
+     - 'Contributing to LISA': 'topics/contributing.md'

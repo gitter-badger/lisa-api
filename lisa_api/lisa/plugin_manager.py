@@ -16,13 +16,26 @@ class PluginManager(object):
         self.django_plugins = []
         self.load_plugins()
 
+    def intents(self, ext):
+        return (ext.name, ext.obj.add_intents())
+
     def load_plugins(self):
-        mgr = extension.ExtensionManager(
+        self.mgr = extension.ExtensionManager(
             namespace='lisa.api.plugins',
-            invoke_on_load=False,
+            invoke_on_load=True,
             verify_requirements=True
         )
-        self.plugins = mgr.names()
+        self.plugins = self.mgr.names()
         for plugin in self.plugins:
             self.django_plugins.append('lisa_plugins_%s' % plugin)
         logger.info("Loaded plugins : %s" % self.plugins)
+
+    def load_intents(self):
+        if self.plugins:
+            logger.info("Adding intents to database")
+            try:
+                self.mgr.map(self.intents)
+            except RuntimeError:
+                logger.info("There was a problem loading plugins intents")
+        else:
+            logger.info("There is no plugin loaded")

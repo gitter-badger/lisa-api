@@ -1,6 +1,35 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from lisa_api.api.models import Plugin
+from lisa_api.lisa.plugin_manager import PluginManager
+from django.core.management import call_command, ManagementUtility
+from django.test import TestCase
+from django.utils.six import StringIO
+from django.test.utils import captured_stderr
+from testfixtures import log_capture
+import mock
+
+
+class fakecookie(object):
+    class main():
+        def cookiecutter():
+            raise NotImplementedError
+
+
+class CommandPluginTest(TestCase):
+    @mock.patch('lisa_api.api.management.commands.plugins.cookiecutter')
+    def test_command_plugin_output(self, mock_cookiecutter):
+        out = StringIO()
+        call_command('plugins',
+                     '--create',
+                     stdout=out)
+        mock_cookiecutter.assert_called_once_with('https://github.com/project-lisa/cookiecutter-lisa-plugins.git')
+        self.assertIn('Successfully created the plugin', out.getvalue())
+
+    def test_command_plugin_error(self):
+        with captured_stderr() as stderr, self.assertRaises(SystemExit):
+            ManagementUtility(['lisa-api-cli.py', 'plugins']).execute()
+        self.assertIn("CommandError", stderr.getvalue())
 
 
 class CoreTests(APITestCase):
@@ -8,6 +37,7 @@ class CoreTests(APITestCase):
         # Every test needs access to the request factory.
         self.plugin = Plugin.objects.create(name="testplugin")
         self.plugin_url = '/api/v1/core/plugins/%i/' % self.plugin.id
+        self.plugin_manager = PluginManager()
 
     def test_v1_create_plugin(self):
         """
@@ -28,3 +58,13 @@ class CoreTests(APITestCase):
         """
         response = self.client.delete(self.plugin_url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    @log_capture()
+    def test_v1_load_intent_plugin(self, l):
+        """
+        Load plugin intents
+        """
+        self.plugin_manager.load_intents()
+        l.check(
+            ('lisa_api', 'INFO', 'There is no plugin loaded')
+        )

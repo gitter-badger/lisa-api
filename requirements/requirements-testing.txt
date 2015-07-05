@@ -5,3 +5,4 @@ coverage
 jsonfield
 mock
 responses
+testfixtures
