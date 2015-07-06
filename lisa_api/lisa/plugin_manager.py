@@ -34,7 +34,7 @@ class PluginManager(object):
         if self.plugins:
             logger.info("Adding intents to database")
             try:
-                self.mgr.map(self.intents)
+                self.mgr.map(lambda ext: (ext.name, ext.obj.add_intents()))
             except RuntimeError:
                 logger.info("There was a problem loading plugins intents")
         else:
