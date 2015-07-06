@@ -270,9 +270,11 @@ class ShoppingList(models.Model):
 
 <p>The function <code>save</code> is here to override the default <code>save</code> function of a model. Here, we want to have name always in lowercase.</p>
 <h3 id="create-a-serializer">Create a serializer</h3>
-<pre><code>Serializers allow complex data such as querysets and model instances to be converted to native Python datatypes that can then be easily rendered into JSON, XML or other content types. Serializers also provide deserialization, allowing parsed data to be converted back into complex types, after first validating the incoming data.
-</code></pre>
-
+<blockquote>
+<p>Serializers allow complex data such as querysets and model instances to be converted to native Python datatypes that can then be easily rendered into JSON, XML or other content types.
+Serializers also provide deserialization, allowing parsed data to be converted back into complex types, after first validating the incoming data.
+-- <cite>Django Rest Framework</cite></p>
+</blockquote>
 <p>You will find more informations on the <a href="http://www.django-rest-framework.org/api-guide/serializers/">serializers</a> page of Django Rest Framework.</p>
 <p>In our file <code>lisa_plugins_shopping/serializers.py</code> :</p>
 <pre><code class="python">from lisa_plugins_shopping.models import ShoppingList
@@ -290,11 +292,12 @@ class ShoppingListSerializer(serializers.HyperlinkedModelSerializer):
 
 <p>The <code>extra_kwargs</code> parameter allow us to build beautiful url replacing the id by the name of the list.</p>
 <h3 id="create-the-view">Create the view</h3>
-<pre><code>A view is a callable which takes a request and returns a response.
+<blockquote>
+<p>A view is a callable which takes a request and returns a response.
 This can be more than just a function, and Django provides an example of some classes which can be used as views.
 These allow you to structure your views and reuse code by harnessing inheritance and mixins.
-</code></pre>
-
+-- <cite>Django</cite></p>
+</blockquote>
 <p>The view will contains all the logic to apply. It receive a request, apply some operations and return a response.</p>
 <p>As we have a simple model, we don't want to write all the create/read/update/delete views, so we use Django Rest Framework which automate all these things using a <a href="http://www.django-rest-framework.org/api-guide/viewsets/">viewset</a>.</p>
 <p>In our file <code>lisa_plugins_shopping/views.py</code> :</p>
