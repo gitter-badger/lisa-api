@@ -4,6 +4,8 @@ site_description: LISA - API
 
 repo_url: https://github.com/project-lisa/lisa-api
 
+theme_dir: docs_theme
+
 pages:
  - Home: 'index.md'
  - Tutorial:
