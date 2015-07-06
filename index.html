@@ -69,6 +69,12 @@
 </li>
 
                         
+                            
+<li >
+    <a href="tutorial/1-plugins/">Plugins</a>
+</li>
+
+                        
                         </ul>
                     </li>
                 
@@ -138,10 +144,10 @@
         <li class="main active"><a href="#requirements">Requirements</a></li>
         
     
-        <li class="main "><a href="#installation">Installation</a></li>
+        <li class="main "><a href="#quickstart">Quickstart</a></li>
         
     
-        <li class="main "><a href="#quickstart">Quickstart</a></li>
+        <li class="main "><a href="#tutorial">Tutorial</a></li>
         
     
         <li class="main "><a href="#development">Development</a></li>
@@ -195,32 +201,13 @@ If your device can be reach and used by python, so you can expose a http endpoin
 <li>Kombu</li>
 <li>Requests</li>
 </ul>
-<h2 id="installation">Installation</h2>
-<p>Install using <code>pip</code>, including any optional packages you want...</p>
-<pre><code>pip install lisa-api
-</code></pre>
-<p>...or clone the project from github.</p>
-<pre><code>git clone git@github.com:project-lisa/lisa-api.git
-</code></pre>
-<p>Create the MySQL user</p>
-<pre><code>grant all privileges on lisa_api.* to 'lisa_api'@'localhost' identified by 'lisapassword';
-</code></pre>
-<p>Create a configuration file</p>
-<pre><code>sudo mkdir -p /etc/lisa/conf/
-lisa-api-cli configuration save --filename /etc/lisa/conf/lisa_api.ini
-</code></pre>
-<p>You can of course edit these configuration parameters following your needs</p>
-<p>Create your super-user</p>
-<pre><code>lisa-api-cli createsuperuser
-</code></pre>
-<p>Then launch the lisa-api webserver</p>
-<pre><code>lisa-api-cli runserver 0.0.0.0:8000
-</code></pre>
-<p>You can now access it in your browser by loging in before at <a href="http://127.0.0.1:8000/api-auth/login/">http://127.0.0.1:8000/api-auth/login/</a></p>
-<pre><code>http://localhost:8000/docs/
-</code></pre>
 <h2 id="quickstart">Quickstart</h2>
 <p>Can't wait to get started? The <a href="tutorial/quickstart/">quickstart guide</a> is the fastest way to get up and running, and creating plugins.</p>
+<h2 id="tutorial">Tutorial</h2>
+<p>The tutorial will walk you through the building blocks that make up REST framework.   It'll take a little while to get through, but it'll give you a comprehensive understanding of how everything fits together, and is highly recommended reading.</p>
+<ul>
+<li><a href="tutorial/1-plugins/">1 - Plugins</a></li>
+</ul>
 <h2 id="development">Development</h2>
 <p>See the <a href="topics/contributing/">Contribution guidelines</a> for information on how to clone
 the repository, run the test suite and contribute changes back to LISA API.</p>
@@ -294,5 +281,5 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p></div>
 
 <!--
 MkDocs version : 0.14.0
-Build Date UTC : 2015-06-25 07:34:09.852879
+Build Date UTC : 2015-07-06 16:43:22.184119
 -->

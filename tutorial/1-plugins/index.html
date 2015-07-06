@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="http://api.docs.lisa-project.net/tutorial/1-plugins/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+
+	<title>Plugins - LISA API</title>
+
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome-4.0.3.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="../../css/highlight.css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+        
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+            <a class="navbar-brand" href="../..">LISA API</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+            
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="../..">Home</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tutorial <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../quickstart/">Quickstart</a>
+</li>
+
+                        
+                            
+<li class="active">
+    <a href="./">Plugins</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Topics <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../../topics/internationalization/">Internationalization</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../../topics/contributing/">Contributing to LISA</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+            
+
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                        <i class="fa fa-search"></i> Search
+                    </a>
+                </li>
+                
+                    <li >
+                        <a rel="next" href="../quickstart/">
+                            <i class="fa fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../../topics/internationalization/">
+                            Next <i class="fa fa-arrow-right"></i>
+                        </a>
+                    </li>
+                
+                
+                    <li>
+                        <a href="https://github.com/project-lisa/lisa-api">
+                            
+                                <i class="fa fa-github"></i>
+                            
+                            GitHub
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+</div>
+
+        <div class="container">
+            
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+    
+        <li class="main active"><a href="#plugins">Plugins</a></li>
+        
+            <li><a href="#how-it-work">How it work</a></li>
+        
+            <li><a href="#structure">Structure</a></li>
+        
+            <li><a href="#create-your-first-plugin">Create your first plugin</a></li>
+        
+            <li><a href="#load-the-plugin">Load the plugin</a></li>
+        
+            <li><a href="#customize-the-plugin">Customize the plugin</a></li>
+        
+            <li><a href="#publish-it">Publish it</a></li>
+        
+    
+        <li class="main "><a href="#write-more-complex-plugins">Write more complex plugins</a></li>
+        
+    
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="plugins">Plugins</h1>
+<h2 id="how-it-work">How it work</h2>
+<p>As the API is done with <a href="https://www.djangoproject.com/">Django</a>, you will need to understand <a href="https://www.djangoproject.com/">Django</a> to create the plugins.</p>
+<p>Plugins are created with <a href="http://www.django-rest-framework.org/">Django Rest Framework</a> (you should read the docs too).</p>
+<p>Each plugin is a <a href="https://docs.djangoproject.com/en/1.8/ref/applications/">Django Application</a> which is dynamically loaded by django using the entry points.</p>
+<p>An entry point is a Python object in a project’s code that is identified by a string in the project’s <code>setup.py</code> file. The entry point is referenced by a group and a name so that the object may be discoverable. This means that another application can search for all the installed software that has an entry point with a particular group name, and then access the Python object associated with that name.</p>
+<p>This is extremely useful because it means it is possible to write plugins for an appropriately-designed application that can be loaded at run time.</p>
+<p>It is important to understand that entry points are a feature of the new Python eggs package format and are not a standard feature of Python.</p>
+<p>The entry point in our plugin look like :</p>
+<pre><code>entry_points={
+    'lisa.api.plugins': [
+        'shopping = lisa_plugins_shopping:ShoppingPlugin',
+    ]
+},
+</code></pre>
+<p>We register the plugin <code>shopping</code> in the namespace <code>lisa.api.plugins</code> and it is mapped to the class <code>ShoppingPlugin</code> in our package (defined in the <code>__init__.py</code> file).</p>
+<p>The <code>INSTALLED_APP</code> list of Django is populated by the plugin manager which will look for all plugin available in the namespace <code>lisa.api.plugins</code> and will import all their urls and models.</p>
+<p>Django as other framework don't support to add or delete routes at runtime. So the plugins are loaded when the api server is launched.
+When a new plugin is installed or removed, the server needs to be restarted.</p>
+<h2 id="structure">Structure</h2>
+<p>A plugin is mainly a Django Application with some added features. By default, it has this structure :</p>
+<ul>
+<li><code>tests</code> : it's the directory containing all your unit tests to be sure your plugin will work even if you modify it, or if it works with the new LISA API versions</li>
+<li><code>requirements/requirements-plugin.txt</code> : this file contains the libraries required for your plugin (note that it differs from pip dependancies (check the setup.py file)</li>
+<li><code>setup.py</code> : this file manage how you're plugin will be installed. You configure your name, and few metadata that will appears on pypi. You will have to edit this file to add entry_points or to add required libraries</li>
+<li><code>lisa_plugins_shopping/__init__.py</code> : contains metadata about your plugin and the intents mapped to your API.</li>
+<li><code>lisa_plugins_shopping/models.py</code> : contains the model of your object (optional). This model will be the table in the database you could use</li>
+<li><code>lisa_plugins_shopping/serializers.py</code> : contains classes to explain to django how to serialize the data received on the API</li>
+<li><code>lisa_plugins_shopping/urls.py</code> : contains url and the view attached</li>
+<li><code>lisa_plugins_shopping/views.py</code> : the most important part of your plugin. It contains all the logic and how the data received should be used</li>
+<li><code>lisa_plugins_shopping/migrations</code> : this directory contains all the evolutions of your model. his directory is automatically managed by django and will provide a very easy system to distribute new version of your plugin</li>
+</ul>
+<h2 id="create-your-first-plugin">Create your first plugin</h2>
+<p>Place yourself in the directory where you have permissions to create a directory and would like to work. For this tutorial we will use <code>Sandbox</code></p>
+<pre><code>cd Sandbox
+</code></pre>
+<p>Now use the <code>lisa-api-cli</code> to create the plugin from the template</p>
+<pre><code>lisa-api-cli plugins --create
+</code></pre>
+<p>Now, answer to the questions. For example, to create the shopping plugin :</p>
+<pre><code>full_name (default is "Your full name here")? Julien Syx
+email (default is "you@example.com")? julien@lisa-project.net
+github_username (default is "yourname")? Seraf
+app_name (default is "package")? shopping
+project_short_description (default is "Your project description goes here")? This plugin manage a shopping list
+year (default is "2015")? 
+version (default is "0.1.0")? 
+Successfully created the plugin
+</code></pre>
+<h2 id="load-the-plugin">Load the plugin</h2>
+<p>The next step is to have your plugin loaded in the API (even if it do nothing).</p>
+<p>First, we will create a git repository to track the changes and share the sources to everyone.
+Create a git repository on github, bitbucket, whatever you prefer, then initialize the repository :</p>
+<pre><code>git init
+</code></pre>
+<p>And follow the instructions given by github to map this repository to the one you created :</p>
+<pre><code>git remote add origin git@github.com:Seraf/lisa-plugins-shopping.git
+git add *
+git commit . -m 'Initial commit'
+git push -u origin master
+</code></pre>
+<p>The plugin will be packaged in the future but for development purpose, you will have to tell python where to load your package :</p>
+<pre><code>cd Sandbox/lisa-plugins-shopping
+python setup.py sdist build
+export PYTHONPATH=~/Sandbox/lisa-plugins-shopping:$PYTHONPATH
+</code></pre>
+<p>I suggest to set this line in your rc file (depending your shell). Commonly it's <code>~/.bashrc</code> or <code>.zshrc</code></p>
+<p>You should see your package loaded by doing a <code>pip freeze | grep lisa-plugins</code></p>
+<pre><code>-e git+https://github.com/project-lisa/lisa-plugins-shopping.git@bdfdd3a868926ed960f7be3ca27e77a03b88d920#egg=lisa_plugins_shopping-origin/develop
+</code></pre>
+<h2 id="customize-the-plugin">Customize the plugin</h2>
+<p>First, you need to understand the concept of <a href="https://docs.djangoproject.com/en/1.8/topics/http/views/">views</a> and <a href="https://docs.djangoproject.com/en/1.8/topics/db/models/">models</a> of Django.</p>
+<h3 id="add-a-dependancie">Add a dependancie</h3>
+<p>For the shopping plugin, we want to have multiple lists. A list has a <code>name</code> and contains some products/items.
+As items can be anything, it doesn't make sense to create a product model and play with foreign key to map a product on a list.
+Instead, I will use a jsonfield and create the list in a json. Later it will be easy to store a quantity of product directly in the json.</p>
+<p>To add this jsonfield, we will need to use <a href="https://github.com/bradjasper/django-jsonfield">django-jsonfield</a>.</p>
+<p>When you add a dependancie, you must know if this one is necessary for the plugin to work.
+If it is needed, add it as a dependancie of your plugin, else you can include it in the <code>requirements-optional.txt</code> file</p>
+<p>You will need to update these files :</p>
+<ul>
+<li><code>requirements/requirements-plugin.txt</code></li>
+<li><code>setup.py</code></li>
+</ul>
+<p>The setup file has already a dependancie to <code>lisa-api</code>. It seems logic, the plugin need the app where it will be run.
+With this system you can also ask for a minimum version of the package.
+For example you want to use a new class added in the version '1.3' of <code>lisa-api</code>, you can write <code>lisa-api&gt;=1.3</code> in the <code>setup.py</code> requirements.</p>
+<p>When a user will download your plugin, it will ensure the user has the version 1.3 minimum or it will upgrade it to the latest version available.</p>
+<h3 id="create-a-model">Create a model</h3>
+<p>Above, we said that our list model will have a <code>name</code> attribute and a <code>list</code> jsonfield :</p>
+<p>In the <code>lisa_plugins_shopping/models.py</code></p>
+<pre><code class="python">from django.db import models
+from jsonfield import JSONField
+
+
+class ShoppingList(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    list = JSONField()
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        self.name = self.name.lower()
+        super(ShoppingList, self).save(force_insert, force_update)
+
+</code></pre>
+
+<p>The function <code>save</code> is here to override the default <code>save</code> function of a model. Here, we want to have name always in lowercase.</p>
+<h3 id="create-a-serializer">Create a serializer</h3>
+<pre><code>Serializers allow complex data such as querysets and model instances to be converted to native Python datatypes that can then be easily rendered into JSON, XML or other content types. Serializers also provide deserialization, allowing parsed data to be converted back into complex types, after first validating the incoming data.
+</code></pre>
+
+<p>You will find more informations on the <a href="http://www.django-rest-framework.org/api-guide/serializers/">serializers</a> page of Django Rest Framework.</p>
+<p>In our file <code>lisa_plugins_shopping/serializers.py</code> :</p>
+<pre><code class="python">from lisa_plugins_shopping.models import ShoppingList
+from rest_framework import serializers
+
+
+class ShoppingListSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ShoppingList
+        fields = ('url', 'name', 'list')
+        extra_kwargs = {
+            'url': {'lookup_field': 'name'}
+        }
+</code></pre>
+
+<p>The <code>extra_kwargs</code> parameter allow us to build beautiful url replacing the id by the name of the list.</p>
+<h3 id="create-the-view">Create the view</h3>
+<pre><code>A view is a callable which takes a request and returns a response.
+This can be more than just a function, and Django provides an example of some classes which can be used as views.
+These allow you to structure your views and reuse code by harnessing inheritance and mixins.
+</code></pre>
+
+<p>The view will contains all the logic to apply. It receive a request, apply some operations and return a response.</p>
+<p>As we have a simple model, we don't want to write all the create/read/update/delete views, so we use Django Rest Framework which automate all these things using a <a href="http://www.django-rest-framework.org/api-guide/viewsets/">viewset</a>.</p>
+<p>In our file <code>lisa_plugins_shopping/views.py</code> :</p>
+<pre><code class="python">from lisa_plugins_shopping.models import ShoppingList
+from lisa_plugins_shopping.serializers import ShoppingListSerializer
+
+
+class ShoppingListViewSet(viewsets.ModelViewSet):
+    &quot;&quot;&quot;
+    API endpoint that allows users to add/edit/delete shopping lists.
+    &quot;&quot;&quot;
+    queryset = ShoppingList.objects.all()
+    serializer_class = ShoppingListSerializer
+    lookup_field = 'name'
+</code></pre>
+
+<p>The viewset will handle <em>auto-magically</em> the views for your object.</p>
+<h3 id="create-the-url">Create the url</h3>
+<p>The view is created, now you need to tell django how to redirect the request to the correct view.</p>
+<p>In the file <code>lisa_plugins_shopping/urls.py</code> :</p>
+<pre><code class="python">from lisa_plugins_shopping.views import ShoppingListViewSet
+from rest_framework import routers
+from django.conf.urls import include, url
+
+router = routers.DefaultRouter()
+router.register(r'lists', ShoppingListViewSet)
+
+urlpatterns = [
+    url(r'^/', include(router.urls)),
+]
+</code></pre>
+
+<p>We bind the url <code>/lists</code> to the view we created above.</p>
+<h3 id="apply-your-model-to-sql">Apply your model to SQL</h3>
+<p>You now have you model, but you need to create the tables in your database.
+Don't worry, Django will manage them for you. In the last release, it come with a native tool to handle the schema management.</p>
+<p>Each time you will do a modification on your models, you will need to create a migration file :</p>
+<pre><code>lisa-api-cli makemigrations
+</code></pre>
+
+<p>It will create in each app loaded, the migration files under the directory <code>migrations</code>.</p>
+<p>Now, to apply these migrations :</p>
+<pre><code>lisa-api-cli migrate
+</code></pre>
+
+<h3 id="access-the-url">Access the url</h3>
+<p>Now, you can run the lisa-api server :</p>
+<pre><code>lisa-api-cli runserver 0.0.0.0:8000
+</code></pre>
+
+<p>Then, go on <a href="http://localhost:8000/docs/">http://localhost:8000/docs/</a> (be sure to be <a href="http://localhost:8000/api-auth/login/">logged</a> before)</p>
+<p>You should see your plugin and the methods available.</p>
+<p>The LISA API will automatically provide an url like this : http://server/api/v1/plugin-<strong>plugin-name</strong>/</p>
+<p>For example, to create a list :</p>
+<pre><code class="bash">curl -X POST -H &quot;Content-Type: application/json&quot; http://localhost:8000/api/v1/plugin-shopping/lists/ --data '{&quot;name&quot;: &quot;test-list&quot;, &quot;items&quot;: []}'
+</code></pre>
+
+<h3 id="how-to-add-a-custom-route">How to add a custom route</h3>
+<p>If creating a model and his views is very easy, you may need to create custom views.</p>
+<p>For example, we want to add a route to add or delete some products on our list.</p>
+<p>Create the serializer :</p>
+<pre><code class="python">class ItemSerializer(serializers.Serializer):
+    items = serializers.ListField(child=serializers.CharField())
+</code></pre>
+
+<p>We want to receive a list of string like ['tomatoes', 'cucumbers', 'potatoes']</p>
+<p>Now, let's create the view (adding the item_add to existing view) :</p>
+<pre><code class="python">from lisa_plugins_shopping.models import ShoppingList
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from lisa_plugins_shopping.serializers import ShoppingListSerializer, ItemSerializer
+from rest_framework.decorators import detail_route
+from lisa_api.lisa.logger import logger
+from django.utils.translation import ugettext as _
+
+
+class ShoppingListViewSet(viewsets.ModelViewSet):
+    &quot;&quot;&quot;
+    API endpoint that allows users to add/edit/delete shopping lists.
+    &quot;&quot;&quot;
+    queryset = ShoppingList.objects.all()
+    serializer_class = ShoppingListSerializer
+    lookup_field = 'name'
+
+    @detail_route(methods=['POST'], serializer_class=ItemSerializer)
+    def item_add(self, request, name=None):
+        &quot;&quot;&quot;
+        This function manage the jsonfield of a shopping list by adding a product
+        :param request:
+        :param name:
+        :return:
+
+        Example (if the shopping list name is 'default'):
+        curl -X POST -H &quot;Content-Type: application/json&quot; http://127.0.0.1:8000/api/v1/plugin-shopping/lists/default/item_add/ --data '{&quot;items&quot;: [&quot;carotte&quot;, &quot;chocolat&quot;]}
+        ---
+        request_serializer: ItemSerializer
+        response_serializer: ItemSerializer
+        &quot;&quot;&quot;
+        list = self.get_object()
+        json_list = list.list
+
+        if not json_list.get('items'):
+            json_list = {'items': []}
+
+        if request.method == 'POST':
+            serializer = ItemSerializer(data=request.data)
+            if serializer.is_valid():
+                logger.debug(serializer.data['items'])
+                for item in serializer.data['items']:
+                    if item not in json_list['items']:
+                        json_list['items'].append(item)
+                        logger.debug('Adding item {item} to the list'.format(item=item))
+                    else:
+                        logger.debug('Item {item} already exist'.format(item=item))
+                list.list = json_list
+                list.save()
+                return Response(_('Item {items} has been added to the list').format(
+                    items=', '.join(serializer.data['items'])), status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+</code></pre>
+
+<p>We declare a custom route named <code>item_add</code> and it will be available on <code>/api/v1/plugin-shopping/lists/{list_name}/item_add/</code>.</p>
+<p>It's a good practice to add some documentation about your routes, what they done, how to call them etc.</p>
+<p>You can test to add a function to retrieve the list items, and to delete items.</p>
+<p>The complete sources are [available on github][github-shopping-plugin].</p>
+<h3 id="add-an-intent">Add an intent</h3>
+<p>The first goal of LISA is to provide an API to connect everything. With the steps above we have enough knowledge to create all plugins we want.</p>
+<p>But as you may know the second goal of LISA is to let a human interact direcly with this API, by voice or text.</p>
+<p>It means we need to convert a sentence into a HTTP request. It's difficult to know from a sentence to another which field to fill or not.</p>
+<p>For that, in the <code>__init__.py</code> file of your plugin, you will have a function named <code>add_intents</code></p>
+<p>When the server start, it will load each plugin and execute this function.
+This function add in a table the name of the intent and the url to call.</p>
+<p>Let's start adding an intent :</p>
+<pre><code class="python">obj, created = Intent.objects.update_or_create(
+    name='shopping_item_add',
+    defaults={
+        'method': 'POST',
+        'api_url': '/api/v1/plugin-shopping/lists/{list_name}/item_add/'
+    }
+)
+logger.debug(&quot;Adding {intent_name} intent for shopping plugin&quot;.format(intent_name=obj.name))
+
+</code></pre>
+
+<p>It will add an intent named <code>shopping_item_add</code> if it didn't already exist or update this one.</p>
+<p>This intent use the <strong>POST</strong> http verb on the url <code>/api/v1/plugin-shopping/lists/{list_name}/item_add/</code></p>
+<p>The <code>{}</code> allow to specify dynamic fields of the url. If the sentence is <em>"add some potatoes on the list wallmart"</em>, it will replace <code>{listname}</code> by <code>wallmart</code></p>
+<p>The client will process the sentence with a NLP application and will ask the intent metadata to LISA API.</p>
+<p>LISA API will answer with these info, so the client will know the url of your function. One thing it doesn't know yet is how to deal with the arguments.</p>
+<p>It will query the url (your view) with <strong>OPTIONS</strong> verb. It will answer with arguments available :</p>
+<pre><code class="bash">curl -X OPTIONS -H &quot;Content-Type: application/json&quot; http://127.0.0.1:8000/api/v1/plugin-shopping/lists/wallmart/item_add
+</code></pre>
+
+<pre><code class="json">{  
+   &quot;name&quot;:&quot;Shopping List&quot;,
+   &quot;description&quot;:&quot;API endpoint that allows users to add/edit/delete shopping lists.&quot;,
+   &quot;renders&quot;:[  
+      &quot;application/json&quot;,
+      &quot;text/html&quot;
+   ],
+   &quot;parses&quot;:[  
+      &quot;application/json&quot;,
+      &quot;application/x-www-form-urlencoded&quot;,
+      &quot;multipart/form-data&quot;
+   ],
+   &quot;actions&quot;:{  
+      &quot;POST&quot;:{  
+         &quot;items&quot;:{  
+            &quot;type&quot;:&quot;list&quot;,
+            &quot;required&quot;:true,
+            &quot;read_only&quot;:false,
+            &quot;label&quot;:&quot;Items&quot;,
+            &quot;child&quot;:{  
+               &quot;type&quot;:&quot;string&quot;,
+               &quot;required&quot;:true,
+               &quot;read_only&quot;:false
+            }
+         }
+      }
+   }
+}
+</code></pre>
+
+<p>And now, the client will map the field items of your sentence to the items argument.
+As the view need a <em>POST</em> query, the client will do a <em>POST</em> on the url it already knows, with the args filled.</p>
+<h2 id="publish-it">Publish it</h2>
+<p>To publish your plugin, you need to be sure to have a <a href="https://pypi.python.org/pypi">pypi</a> account and <a href="https://docs.python.org/2/distutils/packageindex.html">register</a> your plugin, then :</p>
+<pre><code>cd Sandbox/lisa-plugins-shopping
+python setup.py publish
+</code></pre>
+<p>The command <code>publish</code> has been added in your <code>setup.py</code> file </p>
+<h1 id="write-more-complex-plugins">Write more complex plugins</h1>
+<p>You can do whatever you want. You only need to follow the structure of the plugin, but the content of the views is up to you.</p>
+<p>As plugins are based on the <a href="http://www.django-rest-framework.org/">Django Rest Framework</a>, you should read their documentation to know how to achieve your goal.</p></div>
+            
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            
+            <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+
+        <script src="../../js/jquery-1.10.2.min.js"></script>
+        <script src="../../js/bootstrap-3.0.3.min.js"></script>
+        <script src="../../js/highlight.pack.js"></script>
+        <script>var base_url = '../..';</script>
+        <script data-main="../../mkdocs/js/search.js" src="../../mkdocs/js/require.js"></script>
+        <script src="../../js/base.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            From here you can search these documents. Enter
+                            your search terms below.
+                        </p>
+                        <form role="form">
+                            <div class="form-group">
+                                <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query">
+                            </div>
+                        </form>
+                        <div id="mkdocs-search-results"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
