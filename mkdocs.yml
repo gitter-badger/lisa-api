@@ -8,6 +8,7 @@ pages:
  - Home: 'index.md'
  - Tutorial:
     - 'Quickstart': 'tutorial/quickstart.md'
+    - 'Plugins': 'tutorial/1-plugins.md'
  - Topics:
      - 'Internationalization': 'topics/internationalization.md'
      - 'Contributing to LISA': 'topics/contributing.md'

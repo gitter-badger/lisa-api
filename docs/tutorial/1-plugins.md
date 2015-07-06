@@ -144,9 +144,10 @@ The function `save` is here to override the default `save` function of a model. 
 
 ### Create a serializer
 
-```
-Serializers allow complex data such as querysets and model instances to be converted to native Python datatypes that can then be easily rendered into JSON, XML or other content types. Serializers also provide deserialization, allowing parsed data to be converted back into complex types, after first validating the incoming data.
-```
+> Serializers allow complex data such as querysets and model instances to be converted to native Python datatypes that can then be easily rendered into JSON, XML or other content types.
+> Serializers also provide deserialization, allowing parsed data to be converted back into complex types, after first validating the incoming data.
+> -- <cite>Django Rest Framework</cite>
+
 
 You will find more informations on the [serializers][drf-serializers] page of Django Rest Framework.
 
@@ -168,11 +169,10 @@ class ShoppingListSerializer(serializers.HyperlinkedModelSerializer):
 The `extra_kwargs` parameter allow us to build beautiful url replacing the id by the name of the list.
 
 ### Create the view
-```
-A view is a callable which takes a request and returns a response.
-This can be more than just a function, and Django provides an example of some classes which can be used as views.
-These allow you to structure your views and reuse code by harnessing inheritance and mixins.
-```
+> A view is a callable which takes a request and returns a response.
+> This can be more than just a function, and Django provides an example of some classes which can be used as views.
+> These allow you to structure your views and reuse code by harnessing inheritance and mixins.
+> -- <cite>Django</cite>
 
 The view will contains all the logic to apply. It receive a request, apply some operations and return a response.
 
@@ -423,7 +423,7 @@ To publish your plugin, you need to be sure to have a [pypi][pypi] account and [
 
 The command `publish` has been added in your `setup.py` file 
 
-# Write more complex plugins
+## Write more complex plugins
 
 You can do whatever you want. You only need to follow the structure of the plugin, but the content of the views is up to you.
 
