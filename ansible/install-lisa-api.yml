@@ -1,0 +1,5 @@
+---
+- hosts: lisa-api
+  connection: local
+  roles:
+     - Seraf.lisa-api
