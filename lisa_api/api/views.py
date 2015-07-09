@@ -13,6 +13,8 @@ from rest_framework import status
 from stevedore import driver
 from lisa_api.lisa.logger import logger
 from django.utils.translation import ugettext as _
+from django.conf import settings
+import os
 import pip
 
 
@@ -64,17 +66,25 @@ class PluginViewSet(viewsets.ModelViewSet):
     queryset = Plugin.objects.all()
     serializer_class = PluginSerializer
 
+    def _touch(self, fname, times=None):
+        with open(fname, 'a'):
+            os.utime(fname, times)
+
     def perform_create(self, serializer):
         instance = serializer.save()
         version_str = ''
         if instance.version:
             version_str = ''.join(["==", instance.version])
         pip.main(['install', 'lisa-plugins-' + instance.name + version_str])
+        if settings.BASE_DIR:
+            self._touch(fname='/'.join([settings.BASE_DIR, '__init__.py']))
         logger.info(msg="Plugin installed")
 
     def perform_destroy(self, instance):
         pip.main(['uninstall', '--yes', 'lisa-plugins-' + instance.name])
         instance.delete()
+        if settings.BASE_DIR:
+            self._touch(fname='/'.join([settings.BASE_DIR, '__init__.py']))
         logger.info(msg="Delete plugin")
 
 

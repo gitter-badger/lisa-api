@@ -1,0 +1,3 @@
+[submodule "docker"]
+	path = docker
+	url = https://github.com/project-lisa/lisa-api-docker.git

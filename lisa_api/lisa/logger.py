@@ -25,12 +25,12 @@ LOGGING = {
         }
     },
     'handlers': {
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': 'lisa_api.log',
-            'formatter': 'color'
-        },
+        # 'file': {
+        #     'level': 'INFO',
+        #     'class': 'logging.FileHandler',
+        #     'filename': 'lisa_api.log',
+        #     'formatter': 'color'
+        # },
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
@@ -39,12 +39,12 @@ LOGGING = {
     },
     'loggers': {
         'lisa_api': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': 'DEBUG'
         },
 
         'django.request': {
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
             'level': 'DEBUG'
         }
     }
