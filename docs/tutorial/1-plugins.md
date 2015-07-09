@@ -26,7 +26,7 @@ We register the plugin `shopping` in the namespace `lisa.api.plugins` and it is 
 The `INSTALLED_APP` list of Django is populated by the plugin manager which will look for all plugin available in the namespace `lisa.api.plugins` and will import all their urls and models.
 
 Django as other framework don't support to add or delete routes at runtime. So the plugins are loaded when the api server is launched.
-When a new plugin is installed or removed, the server needs to be restarted.
+When a new plugin is installed or removed, the server needs to be restarted. It has been automated by changing the file attribute of `__init__.py` so the django server do a reload.
 
 ## Structure
 
@@ -41,6 +41,16 @@ A plugin is mainly a Django Application with some added features. By default, it
 * `lisa_plugins_shopping/urls.py` : contains url and the view attached
 * `lisa_plugins_shopping/views.py` : the most important part of your plugin. It contains all the logic and how the data received should be used
 * `lisa_plugins_shopping/migrations` : this directory contains all the evolutions of your model. his directory is automatically managed by django and will provide a very easy system to distribute new version of your plugin
+
+## Install a plugin
+
+The goal is to create a community around LISA. Users will create plugins and share them to others.
+
+Installing a plugin is very simple. You just need to do a HTTP query on the API :
+
+```bash
+curl -X POST -H "Content-Type: application/json" http://localhost:8000/api/v1/core/plugins/ --data '{"name": "shopping"}'
+```
 
 ## Create your first plugin
 
@@ -64,7 +74,7 @@ Now, answer to the questions. For example, to create the shopping plugin :
     Successfully created the plugin
 
 
-## Load the plugin
+### Load the plugin
 
 The next step is to have your plugin loaded in the API (even if it do nothing).
 
@@ -93,10 +103,10 @@ You should see your package loaded by doing a `pip freeze | grep lisa-plugins`
 
     -e git+https://github.com/project-lisa/lisa-plugins-shopping.git@bdfdd3a868926ed960f7be3ca27e77a03b88d920#egg=lisa_plugins_shopping-origin/develop
 
-## Customize the plugin
+### Customize the plugin
 First, you need to understand the concept of [views][django-views] and [models][django-models] of Django.
 
-### Add a dependancie
+#### Add a dependancie
 
 For the shopping plugin, we want to have multiple lists. A list has a `name` and contains some products/items.
 As items can be anything, it doesn't make sense to create a product model and play with foreign key to map a product on a list.
@@ -118,7 +128,7 @@ For example you want to use a new class added in the version '1.3' of `lisa-api`
 
 When a user will download your plugin, it will ensure the user has the version 1.3 minimum or it will upgrade it to the latest version available.
 
-### Create a model
+#### Create a model
 
 Above, we said that our list model will have a `name` attribute and a `list` jsonfield :
 
@@ -142,7 +152,7 @@ class ShoppingList(models.Model):
 
 The function `save` is here to override the default `save` function of a model. Here, we want to have name always in lowercase.
 
-### Create a serializer
+#### Create a serializer
 
 > Serializers allow complex data such as querysets and model instances to be converted to native Python datatypes that can then be easily rendered into JSON, XML or other content types.
 > Serializers also provide deserialization, allowing parsed data to be converted back into complex types, after first validating the incoming data.
@@ -168,7 +178,7 @@ class ShoppingListSerializer(serializers.HyperlinkedModelSerializer):
 
 The `extra_kwargs` parameter allow us to build beautiful url replacing the id by the name of the list.
 
-### Create the view
+#### Create the view
 > A view is a callable which takes a request and returns a response.
 > This can be more than just a function, and Django provides an example of some classes which can be used as views.
 > These allow you to structure your views and reuse code by harnessing inheritance and mixins.
@@ -196,7 +206,7 @@ class ShoppingListViewSet(viewsets.ModelViewSet):
 
 The viewset will handle *auto-magically* the views for your object.
 
-### Create the url
+#### Create the url
 
 The view is created, now you need to tell django how to redirect the request to the correct view.
 
@@ -217,7 +227,7 @@ urlpatterns = [
 
 We bind the url `/lists` to the view we created above.
 
-### Apply your model to SQL
+#### Apply your model to SQL
 
 You now have you model, but you need to create the tables in your database.
 Don't worry, Django will manage them for you. In the last release, it come with a native tool to handle the schema management.
@@ -236,7 +246,7 @@ lisa-api-cli migrate
 ```
 
 
-### Access the url
+#### Access the url
 
 Now, you can run the lisa-api server :
 
@@ -256,7 +266,7 @@ For example, to create a list :
 curl -X POST -H "Content-Type: application/json" http://localhost:8000/api/v1/plugin-shopping/lists/ --data '{"name": "test-list", "items": []}'
 ```
 
-### How to add a custom route
+#### How to add a custom route
 
 If creating a model and his views is very easy, you may need to create custom views.
 
@@ -337,7 +347,7 @@ You can test to add a function to retrieve the list items, and to delete items.
 
 The complete sources are [available on github][github-shopping-plugin].
 
-### Add an intent
+#### Add an intent
 
 The first goal of LISA is to provide an API to connect everything. With the steps above we have enough knowledge to create all plugins we want.
 
@@ -414,7 +424,7 @@ curl -X OPTIONS -H "Content-Type: application/json" http://127.0.0.1:8000/api/v1
 And now, the client will map the field items of your sentence to the items argument.
 As the view need a *POST* query, the client will do a *POST* on the url it already knows, with the args filled.
 
-## Publish it
+### Publish it
 
 To publish your plugin, you need to be sure to have a [pypi][pypi] account and [register][pypi-register] your plugin, then :
 
@@ -423,11 +433,12 @@ To publish your plugin, you need to be sure to have a [pypi][pypi] account and [
 
 The command `publish` has been added in your `setup.py` file 
 
-## Write more complex plugins
+### Write more complex plugins
 
 You can do whatever you want. You only need to follow the structure of the plugin, but the content of the views is up to you.
 
 As plugins are based on the [Django Rest Framework][django-restframework], you should read their documentation to know how to achieve your goal.
+
 
 [django-website]: https://www.djangoproject.com/
 [django-restframework]: http://www.django-rest-framework.org/
