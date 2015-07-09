@@ -52,6 +52,8 @@ Installing a plugin is very simple. You just need to do a HTTP query on the API 
 curl -X POST -H "Content-Type: application/json" http://localhost:8000/api/v1/core/plugins/ --data '{"name": "shopping"}'
 ```
 
+![Install with swagger](img/swagger-plugin-install.png)
+
 ## Create your first plugin
 
 Place yourself in the directory where you have permissions to create a directory and would like to work. For this tutorial we will use `Sandbox`
