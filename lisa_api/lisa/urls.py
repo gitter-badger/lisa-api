@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from lisa_api.api import views as api_views
+from lisa_api.frontend import views as frontend_views
 from rest_framework import routers
 from lisa_api.lisa.plugin_manager import PluginManager
 
@@ -31,6 +32,7 @@ router.register(r'zones', api_views.ZoneViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    url(r'^', include('lisa_api.frontend.urls', namespace='frontend')),
     url(r'^api/v1/core/', include(router.urls)),
     url(r'^api/v1/core/speak/', api_views.SpeakView),
     url(r'^api/v1/core/tts/', api_views.TTSView),

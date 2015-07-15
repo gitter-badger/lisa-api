@@ -11,6 +11,10 @@ class PluginBase(object):
         pass
 
     @abc.abstractmethod
+    def get_version(self):
+        return __version__
+
+    @abc.abstractmethod
     def add_intents(self):
         """Install intents in the database
         """
