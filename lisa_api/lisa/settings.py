@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 from lisa_api.lisa.plugin_manager import PluginManager
 from lisa_api.lisa.configuration import CONF as config
-from django.conf import global_settings
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

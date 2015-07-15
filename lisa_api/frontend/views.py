@@ -9,10 +9,12 @@ import mistune
 
 lisa_all_plugins = {}
 
+
 @login_required()
 def dashboard(request):
     context_instance = RequestContext(request)
     return render(request, 'dashboard.html', context_instance)
+
 
 @login_required()
 def plugin_changelog(request, plugin=None):
@@ -35,6 +37,7 @@ def plugin_changelog(request, plugin=None):
                 return HttpResponse(mistune.markdown(changelog_request.content))
                 # return render(request, 'changelog.html', context, context_instance)
     return HttpResponseNotFound('The plugin was not found')
+
 
 @login_required()
 def plugins(request):
