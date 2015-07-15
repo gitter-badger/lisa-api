@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load compress %}
 
 {% block page_header %}
 Plugins
 {% endblock %}
 
 {% block custom_css %}
-<link href="{% static 'css/plugins.css' %}" rel="stylesheet">
+<link rel="stylesheet" type="text/x-scss" href="{% static "css/plugins.scss" %}" />
 {% endblock %}
 
 {% block custom_js %}

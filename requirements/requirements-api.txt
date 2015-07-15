@@ -10,3 +10,5 @@ kombu
 requests
 cookiecutter
 mistune
+django-compressor
+django-libsass
