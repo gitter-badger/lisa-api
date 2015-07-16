@@ -22,7 +22,6 @@ def plugin_changelog(request, plugin_name=None):
     for remote_plugin in lisa_all_plugins:
         if remote_plugin == plugin_name:
             plugin = lisa_all_plugins[plugin_name]
-            print plugin
             user, repo = plugin['repo_url'].split("/")[-2:]
             changelog_request = requests.get(
                 'https://raw.githubusercontent.com/{user}/{repo}/master/{changelog_file}'.format(
