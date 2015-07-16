@@ -1,5 +1,6 @@
 from django.shortcuts import render, RequestContext
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import ensure_csrf_cookie
 from lisa_api.lisa.plugin_manager import PluginManager
 from distutils.version import StrictVersion
 # from lisa_api.lisa.logger import logger
@@ -39,7 +40,8 @@ def plugin_changelog(request, plugin=None):
     return HttpResponseNotFound('The plugin was not found')
 
 
-@login_required()
+@login_required
+@ensure_csrf_cookie
 def plugins(request):
     pm = PluginManager()
     global lisa_all_plugins

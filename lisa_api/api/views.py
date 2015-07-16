@@ -65,6 +65,7 @@ class PluginViewSet(viewsets.ModelViewSet):
     """
     queryset = Plugin.objects.all()
     serializer_class = PluginSerializer
+    lookup_field = 'name'
 
     def _touch(self, fname, times=None):
         with open(fname, 'a'):
