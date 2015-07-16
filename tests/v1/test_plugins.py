@@ -36,7 +36,7 @@ class CoreTests(APITestCase):
     def setUp(self):
         # Every test needs access to the request factory.
         self.plugin = Plugin.objects.create(name="testplugin")
-        self.plugin_url = '/api/v1/core/plugins/%i/' % self.plugin.id
+        self.plugin_url = '/api/v1/core/plugins/%s/' % self.plugin.name
         self.plugin_manager = PluginManager()
 
     def test_v1_create_plugin(self):
@@ -68,3 +68,13 @@ class CoreTests(APITestCase):
         l.check(
             ('lisa_api', 'INFO', 'There is no plugin loaded')
         )
+
+    @log_capture()
+    def test_v1_get_version_plugin(self, l):
+        """
+        Load plugin version
+        """
+        version = self.plugin_manager.get_version(plugin_name='shopping')
+        # As we don't have plugin loaded, it should use the
+        # default value of the base class which is None
+        self.assertEqual(version, None)
