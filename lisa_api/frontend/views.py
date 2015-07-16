@@ -18,10 +18,11 @@ def dashboard(request):
 
 
 @login_required()
-def plugin_changelog(request, plugin=None):
-    for plugin_name in lisa_all_plugins:
-        if plugin_name == plugin:
+def plugin_changelog(request, plugin_name=None):
+    for remote_plugin in lisa_all_plugins:
+        if remote_plugin == plugin_name:
             plugin = lisa_all_plugins[plugin_name]
+            print plugin
             user, repo = plugin['repo_url'].split("/")[-2:]
             changelog_request = requests.get(
                 'https://raw.githubusercontent.com/{user}/{repo}/master/{changelog_file}'.format(
@@ -31,13 +32,10 @@ def plugin_changelog(request, plugin=None):
                 )
             )
             if changelog_request.ok:
-                # context = {
-                #     'changelog': ,
-                # }
-                # context_instance = RequestContext(request)
                 return HttpResponse(mistune.markdown(changelog_request.content))
-                # return render(request, 'changelog.html', context, context_instance)
-    return HttpResponseNotFound('The plugin was not found')
+            else:
+                return HttpResponseNotFound("<h4>The plugin's changelog was not found on his repository</h4>")
+    return HttpResponseNotFound('<h4>The plugin was not found on the plugin list</h4>')
 
 
 @login_required

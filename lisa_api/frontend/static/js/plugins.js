@@ -15,18 +15,26 @@ $(function() {
 });
 
 $('.button-changelog').click(function(){
-     var plugin_name = $(this).attr("href").split(":").pop();
-     $('#modal-title').text(plugin_name + ' Changelog');
-     $('#ajax').load('/ajax/plugins/changelog/' + plugin_name);
+    var plugin_name = $(this).attr("href").split(":").pop();
+    $('#modal-title').text(plugin_name + ' Changelog');
+    $('#ajax').load('/ajax/plugins/changelog/' + plugin_name, function( response, status, xhr ) {
+        if ( status == "error" ) {
+            $( "#ajax" ).html( response );
+        }
+    });
 });
 
 $('.button-readme').click(function(){
-     var plugin_name = $(this).attr("href").split(":").pop();
-     $('#modal-title').text(plugin_name + ' Readme');
-     $('#ajax').load('/ajax/plugins/readme/' + plugin_name);
+    var plugin_name = $(this).attr("href").split(":").pop();
+    $('#modal-title').text(plugin_name + ' Readme');
+    $('#ajax').load('/ajax/plugins/readme/' + plugin_name, function( response, status, xhr ) {
+        if ( status == "error" ) {
+            $( "#ajax" ).html( response );
+        }
+    });
 });
 
-$('.button-uninstall').click(function(e){
+$('.button-uninstall').click(function(){
     var timeout_reload = 2;
     var plugin_name = $(this).attr("href").split(":").pop();
     $(this).html($(this).attr('data-progresstext') + ' <img src="' + $(this).attr('data-image') +'" />');
@@ -43,7 +51,7 @@ $('.button-uninstall').click(function(e){
     });
 });
 
-$('.button-install').click(function(e){
+$('.button-install').click(function(){
     var timeout_reload = 2;
     var plugin_name = $(this).attr("href").split(":").pop();
 
@@ -61,4 +69,8 @@ $('.button-install').click(function(e){
             }, timeout_reload * 1000);
         }
     });
+});
+
+$(document).on("hidden.bs.modal", function (e) {
+    $(e.target).removeData("bs.modal").find("#ajax").empty();
 });
