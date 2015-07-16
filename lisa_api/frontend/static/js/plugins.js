@@ -7,7 +7,7 @@ if (typeof jQuery === "undefined") {
 
 $(function() {
     $('.plugin-item-content').matchHeight();
-     $.ajaxSetup({
+    $.ajaxSetup({
         headers: {
             'X-CSRFToken': $.cookie('csrftoken')
         }
@@ -26,34 +26,39 @@ $('.button-readme').click(function(){
      $('#ajax').load('/ajax/plugins/readme/' + plugin_name);
 });
 
-$('.button-uninstall').click(function(){
-     var plugin_name = $(this).attr("href").split(":").pop();
-     $.ajax({
-         url: '/api/v1/core/plugins/' + plugin_name + '/',
-         type: 'POST',
-         headers: {'X-HTTP-Method-Override': 'DELETE'},
+$('.button-uninstall').click(function(e){
+    var timeout_reload = 2;
+    var plugin_name = $(this).attr("href").split(":").pop();
+    $(this).html($(this).attr('data-progresstext') + ' <img src="' + $(this).attr('data-image') +'" />');
+    $.ajax({
+        url: '/api/v1/core/plugins/' + plugin_name + '/',
+        type: 'POST',
+        headers: {'X-HTTP-Method-Override': 'DELETE'},
 
-         success : function(){
-             setTimeout(function(){
-                 location.reload();
-             }, 2000);
-         }
+        success : function(){
+            setTimeout(function(){
+                location.reload();
+            }, timeout_reload * 1000);
+        }
     });
 });
 
-$('.button-install').click(function(){
-     var plugin_name = $(this).attr("href").split(":").pop();
-     $.ajax({
-         url: '/api/v1/core/plugins/',
-         data: {
-             'name': plugin_name
-         },
-         type: 'POST',
+$('.button-install').click(function(e){
+    var timeout_reload = 2;
+    var plugin_name = $(this).attr("href").split(":").pop();
 
-         success : function(){
-             setTimeout(function(){
-                 location.reload();
-             }, 2000);
-         }
+    $(this).html($(this).attr('data-progresstext') + ' <img src="' + $(this).attr('data-image') +'" />');
+    $.ajax({
+        url: '/api/v1/core/plugins/',
+        data: {
+            'name': plugin_name
+        },
+        type: 'POST',
+
+        success : function(){
+            setTimeout(function(){
+                location.reload();
+            }, timeout_reload * 1000);
+        }
     });
 });

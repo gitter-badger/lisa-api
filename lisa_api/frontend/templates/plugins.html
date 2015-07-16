@@ -48,12 +48,12 @@ Plugins
                 </div>
                 <div class="plugin-item-actions row">
                     {% if plugin.should_upgrade == True %}
-                    <a class="button button-upgrade" href="#upgrade:{{ name }}">Upgrade</a>
+                    <a class="button button-upgrade" href="#upgrade:{{ name }}" data-image="{% static 'img/ajax-loader.gif' %}" data-progresstext="Upgrading">Upgrade</a>
                     {% endif %}
                     {% if plugin.is_enabled == False %}
-                    <a class="button button-install" href="#install:{{ name }}">Install</a>
+                    <a class="button button-install" href="#install:{{ name }}" data-image="{% static 'img/ajax-loader.gif' %}" data-progresstext="Installing">Install</a>
                     {% else %}
-                    <a class="button button-uninstall" href="#uninstall:{{ name }}">Uninstall</a>
+                    <a class="button button-uninstall" href="#uninstall:{{ name }}" data-image="{% static 'img/ajax-loader.gif' %}" data-progresstext="Uninstalling">Uninstall</a>
                     {% endif %}
                     <a class="button github" href="{{ plugin.repo_url }}">
                         <i class="fa fa-github"></i>

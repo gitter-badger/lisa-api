@@ -1,3 +1,10 @@
+# v0.4.5
+## not released yet
+
+1. [](#new)
+    * Adding a progress bar loader for pages
+    * Adding a gif loader when installing/uninstalling plugins
+
 # v0.4.4
 ## 07/16/2015
 
