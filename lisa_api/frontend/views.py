@@ -72,7 +72,8 @@ def plugins(request):
                 'is_enabled': is_enabled,
                 'should_upgrade': should_upgrade,
                 'author': plugin['author'],
-                'repo_url': plugin['repo_url']
+                'repo_url': plugin['repo_url'],
+                'keywords': plugin['keywords']
             }
         context = {
             'lisa_plugins': lisa_template_plugins

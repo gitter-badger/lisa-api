@@ -38,6 +38,7 @@ Plugins
                     <a class="button button-changelog" data-toggle="modal" href="#changelog:{{ name }}" data-target="#changelog">Changelog</a>
                     <a class="button" href="{{ plugin.repo_url }}/blob/master/README.md" target="_blank">Documentation</a>
                 </div>
+                <div class="plugin-item-keywords">{% for keyword in plugin.keywords %}{{ keyword }}{%if not forloop.last%}, {%endif%}{% endfor %}</div>
                 <div class="plugin-item-content row" style="width: 100%">
                     <p>{{ plugin.summary }}</p>
                     {% if plugin.should_upgrade == True %}
