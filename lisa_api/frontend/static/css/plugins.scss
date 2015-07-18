@@ -79,22 +79,20 @@
 	.plugins-filter {
 		display: inline-block;
 		width: 100%;
-		padding-left: 7rem;
-		padding-right: 7rem;
+		padding-left: 1rem;
 		.search-wrapper {
+		    input {
+				padding-left: 1.75rem;
+			}
 			width: 50%;
 			margin-bottom: 1rem;
 			position: relative;
 			display: inline-block;
-			i {
+			.fa-search {
 				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				padding-right: 6px;
-				line-height: 35px;
-				cursor: pointer;
-				display: none;
+				top: 0.65rem;
+			    left: 0.5rem;
+				font-size: 15px;
 			}
 		}
 	}

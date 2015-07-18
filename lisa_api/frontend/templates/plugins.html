@@ -15,28 +15,27 @@ Plugins
 {% endblock %}
 
 {% block content %}
-<!--    <div class="plugins-filter row">
-        <div class="search-wrapper">
-            <input placeholder="Filter plugins by title or description" type="text">
-            <i class="fa fa-times-circle"></i>
-        </div>
-    </div>
--->
     <div class="container-fluid" id="plugins">
-        <div class="plugins-items col-md-12 col-center">
+        <div class="plugins-filter row">
+            <div class="search-wrapper">
+                <i class="fa fa-search"></i>
+                <input placeholder="Filter plugins by title, keywords, description and author" type="text">
+            </div>
+        </div>
+        <div class="plugins-items row col-center">
         {% for name, plugin in lisa_plugins.items %}
-            <div class="plugin-item col-md-3">
+            <div class="plugin-item col-md-4">
                 <div class="plugin-item-header row">
                     <i class="fa fa-flask"></i>
                     <span class="plugin-remote-version">{{ plugin.remote_version }}</span>
-                    <h4><a href="">{{ name }}</a></h4>
+                    <h4><a href="">{{ name | title }}</a></h4>
                     <p class="plugin-item-info">
                         by <b>{{ plugin.author }}</b>
                     </p>
                 </div>
                 <div class="plugin-item-links row">
-                    <a class="button button-changelog" data-toggle="modal" href="#changelog:{{ name }}" data-target="#changelog">Changelog</a>
-                    <a class="button" href="{{ plugin.repo_url }}/blob/master/README.md" target="_blank">Documentation</a>
+                    <a class="button button-changelog" data-toggle="modal" href="#changelog:{{ name }}" data-target="#changelog"><i class="fa fa-history"></i> Changelog</a>
+                    <a class="button" href="{{ plugin.repo_url }}/blob/master/README.md" target="_blank"><i class="fa fa-book"></i> Documentation</a>
                 </div>
                 <div class="plugin-item-keywords">{% for keyword in plugin.keywords %}{{ keyword }}{%if not forloop.last%}, {%endif%}{% endfor %}</div>
                 <div class="plugin-item-content row" style="width: 100%">
@@ -63,7 +62,7 @@ Plugins
             </div>
         {% if forloop.counter|divisibleby:3 %}
         </div>
-        <div class="plugins-items col-md-12 col-center">
+        <div class="plugins-items row col-center">
         {% endif %}
         {% endfor %}
         </div>

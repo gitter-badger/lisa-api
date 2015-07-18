@@ -2,8 +2,14 @@
 ## not released yet
 
 1. [](#new)
-    * Adding a progress bar loader for pages
-    * Adding a gif loader when installing/uninstalling plugins
+    * Add a progress bar loader for pages
+    * Add a gif loader when installing/uninstalling plugins
+    * Add keywords on plugins
+    * Add shortcuts to chat, docs, etc
+    * Add an input box to filter plugins
+
+1. [](#improved)
+    * Move docs from api to a shared repository between all components
 
 # v0.4.4
 ## 07/16/2015

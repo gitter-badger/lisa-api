@@ -74,3 +74,22 @@ $('.button-install').click(function(){
 $(document).on("hidden.bs.modal", function (e) {
     $(e.target).removeData("bs.modal").find("#ajax").empty();
 });
+
+$('.plugins-filter .search-wrapper input').on('keyup',function(e){
+    var input=this;
+    var value=this.value,items=$('.plugin-item'),title,desc,author,keywords,value;
+    items.css('display','none').each(function(i,item){
+        item=$(item);
+        value=input.value.toLowerCase();
+        title=item.find('h4 a').text().toLowerCase();
+        desc=item.find('.plugin-item-content').text().toLowerCase();
+        author=item.find('.plugin-item-info').text().toLowerCase();
+        keywords=item.find('.plugin-item-keywords').text().toLowerCase();
+        if(title.match(value)||keywords.match(value)||desc.match(value)||author.match(value)){
+            item.css('display','block');
+        }
+        else{
+            item.css('display','none');
+        }
+    });
+});
