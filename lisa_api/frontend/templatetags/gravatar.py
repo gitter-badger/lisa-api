@@ -11,7 +11,7 @@
 """
 
 from django import template
-import urllib
+from six.moves.urllib.parse import urlencode
 import hashlib
 
 register = template.Library()
@@ -24,14 +24,16 @@ class GravatarUrlNode(template.Node):
     def render(self, context):
         try:
             email = self.email.resolve(context)
+            if not email:
+                email = ''
         except template.VariableDoesNotExist:
             return ''
 
         default = 'mm'
         size = 40
 
-        gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower()).hexdigest() + "?"
-        gravatar_url += urllib.urlencode({'d': default, 's': str(size)})
+        gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(email.lower().encode('utf-8')).hexdigest() + "?"
+        gravatar_url += urlencode({'d': default, 's': str(size)})
 
         return gravatar_url
 
@@ -42,6 +44,6 @@ def gravatar_url(parser, token):
         tag_name, email = token.split_contents()
 
     except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires a single argument" % token.contents.split()[0]
+        raise template.TemplateSyntaxError("%r tag requires a single argument" % token.contents.split()[0])
 
     return GravatarUrlNode(email)

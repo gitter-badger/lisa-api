@@ -35,7 +35,7 @@ $('.button-readme').click(function(){
 });
 
 $('.button-uninstall').click(function(){
-    var timeout_reload = 2;
+    var timeout_reload = 5;
     var plugin_name = $(this).attr("href").split(":").pop();
     $(this).html($(this).attr('data-progresstext') + ' <img src="' + $(this).attr('data-image') +'" />');
     $.ajax({
@@ -52,16 +52,30 @@ $('.button-uninstall').click(function(){
 });
 
 $('.button-install').click(function(){
-    var timeout_reload = 2;
-    var plugin_name = $(this).attr("href").split(":").pop();
+    var timeout_reload = 5;
+    var action_name = $(this).attr("href").split(":")[0];
+    var plugin_name = $(this).attr("href").split(":")[1];
+    var version = $(this).attr("href").split(":")[2];
+
+    var type = 'POST';
+    var url = '/api/v1/core/plugins/';
+
+    console.log(action_name);
+    console.log(plugin_name);
+    console.log(version);
+    if(action_name == '#upgrade') {
+        type = 'PUT';
+        url = '/api/v1/core/plugins/' + plugin_name + '/';
+    }
 
     $(this).html($(this).attr('data-progresstext') + ' <img src="' + $(this).attr('data-image') +'" />');
     $.ajax({
-        url: '/api/v1/core/plugins/',
+        url: url,
         data: {
-            'name': plugin_name
+            'name': plugin_name,
+            'version': version
         },
-        type: 'POST',
+        type: type,
 
         success : function(){
             setTimeout(function(){

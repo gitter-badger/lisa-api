@@ -88,6 +88,14 @@ class PluginViewSet(viewsets.ModelViewSet):
             self._touch(fname='/'.join([settings.BASE_DIR, '__init__.py']))
         logger.info(msg="Delete plugin")
 
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        version_str = ''
+        if instance.version:
+            version_str = ''.join(["==", instance.version])
+        pip.main(['install', 'lisa-plugins-' + instance.name + version_str])
+        logger.info(msg="Plugin updated")
+
 
 @api_view(['POST'])
 def SpeakView(request, format=None):

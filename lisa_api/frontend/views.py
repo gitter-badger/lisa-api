@@ -3,12 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import ensure_csrf_cookie
 from lisa_api.lisa.plugin_manager import PluginManager
 from distutils.version import StrictVersion
-# from lisa_api.lisa.logger import logger
+from lisa_api.lisa.logger import logger
 from django.http import HttpResponseNotFound, HttpResponse
 import requests
 import mistune
-
-lisa_all_plugins = {}
 
 
 @login_required()
@@ -17,8 +15,19 @@ def dashboard(request):
     return render(request, 'dashboard.html', context_instance)
 
 
+def _get_global_plugins():
+    r = requests.get('https://raw.githubusercontent.com/project-lisa/lisa/master/lisa-plugins/lisa-plugins.json')
+    if r.ok:
+        logger.debug('Refreshing plugin list')
+        lisa_all_plugins = r.json()
+        return lisa_all_plugins
+    else:
+        return False
+
+
 @login_required()
 def plugin_changelog(request, plugin_name=None):
+    lisa_all_plugins = request.session.get('lisa_all_plugins', False)
     for remote_plugin in lisa_all_plugins:
         if remote_plugin == plugin_name:
             plugin = lisa_all_plugins[plugin_name]
@@ -41,11 +50,10 @@ def plugin_changelog(request, plugin_name=None):
 @ensure_csrf_cookie
 def plugins(request):
     pm = PluginManager()
-    global lisa_all_plugins
 
-    r = requests.get('https://raw.githubusercontent.com/project-lisa/lisa/master/lisa-plugins/lisa-plugins.json')
-    if r.ok:
-        lisa_all_plugins = r.json()
+    lisa_all_plugins = _get_global_plugins()
+    if lisa_all_plugins:
+        request.session['lisa_all_plugins'] = lisa_all_plugins
         lisa_template_plugins = {}
 
         for plugin_name in lisa_all_plugins:
