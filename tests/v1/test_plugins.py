@@ -59,6 +59,17 @@ class CoreTests(APITestCase):
         response = self.client.delete(self.plugin_url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
+    def test_v1_modify_plugin(self):
+        """
+        Ensure we can modify a plugin
+        """
+        data = {
+            'name': u'testplugin',
+            'version': u'1.0'
+        }
+        response = self.client.put(self.plugin_url, data, format='json')
+        self.assertEqual(response.data.get('version'), data.get('version'))
+
     @log_capture()
     def test_v1_load_intent_plugin(self, l):
         """
