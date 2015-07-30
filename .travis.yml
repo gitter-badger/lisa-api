@@ -11,18 +11,24 @@ env:
 services:
   - rabbitmq
 
+sudo: false
+
 matrix:
   fast_finish: true
   allow_failures:
     - env: TOX_ENV=py27-djangomaster
     - env: TOX_ENV=py34-djangomaster
 
-before_install:
-  - sudo apt-get update --fix-missing
+addons:
+  apt:
+    packages:
+    - libav-tools
+    - libttspico-data
+    - libttspico-utils
+    - libavcodec-extra-53
 
 install:
   - pip install tox coveralls
-  - sudo apt-get install -y libav-tools libttspico-data libttspico-utils libavcodec-extra-53
 
 script:
   - tox -e $TOX_ENV

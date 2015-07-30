@@ -39,6 +39,7 @@ class CoreTests(APITestCase):
         self.plugin_url = '/api/v1/core/plugins/%s/' % self.plugin.name
         self.plugin_manager = PluginManager()
 
+    # TODO : Should mock this function
     def test_v1_create_plugin(self):
         """
         Ensure we can install a new plugin
@@ -52,6 +53,7 @@ class CoreTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data.get('name'), data.get('name'))
 
+    # TODO : Should mock this function
     def test_v1_destroy_plugin(self):
         """
         Ensure we can uninstall a plugin
@@ -59,6 +61,7 @@ class CoreTests(APITestCase):
         response = self.client.delete(self.plugin_url, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
+    # TODO : Should mock this function
     def test_v1_modify_plugin(self):
         """
         Ensure we can modify a plugin
