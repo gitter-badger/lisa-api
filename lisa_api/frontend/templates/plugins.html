@@ -23,6 +23,9 @@ Plugins
             </div>
         </div>
         <div class="plugins-items row col-center">
+        {% if error %}
+            {{ error }}
+        {% endif %}
         {% for name, plugin in lisa_plugins.items %}
             <div class="plugin-item col-md-4">
                 <div class="plugin-item-header row">

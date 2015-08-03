@@ -12,7 +12,7 @@ class PluginViewsTestCase(TestCase):
         self.user = User.objects.create_user('testuser', 'testuser@lisa-project.net', 'testpassword')
 
     @responses.activate
-    def test_plugins(self):
+    def test_plugins_ok(self):
         url_re = re.compile(
             r'https?://raw.githubusercontent.com/project-lisa/lisa/master/lisa-plugins/lisa-plugins.json'
         )
@@ -28,3 +28,18 @@ class PluginViewsTestCase(TestCase):
         # Should mock the plugin list and inject a custom plugin to see if it display correctly
         response = self.client.get('/plugins/')
         self.assertContains(response, 'Plugins')
+
+    @responses.activate
+    def test_plugins_not_found(self):
+        url_re = re.compile(
+            r'https?://raw.githubusercontent.com/project-lisa/lisa/master/lisa-plugins/lisa-plugins.json'
+        )
+        responses.add(responses.GET, url_re,
+                      body="error", status=404,
+                      content_type='application/json')
+
+        self.client.login(username='testuser', password='testpassword')
+        # Should mock the plugin list and inject a custom plugin to see if it display correctly
+        response = self.client.get('/plugins/')
+        print response
+        self.assertContains(response, 'Could not retrieve')
