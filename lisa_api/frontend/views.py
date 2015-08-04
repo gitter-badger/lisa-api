@@ -28,21 +28,23 @@ def _get_global_plugins():
 @login_required()
 def plugin_changelog(request, plugin_name=None):
     lisa_all_plugins = request.session.get('lisa_all_plugins', False)
-    for remote_plugin in lisa_all_plugins:
-        if remote_plugin == plugin_name:
-            plugin = lisa_all_plugins[plugin_name]
-            user, repo = plugin['repo_url'].split("/")[-2:]
-            changelog_request = requests.get(
-                'https://raw.githubusercontent.com/{user}/{repo}/master/{changelog_file}'.format(
-                    user=user,
-                    repo=repo,
-                    changelog_file='CHANGELOG.md'
+    if lisa_all_plugins:
+        for remote_plugin in lisa_all_plugins:
+            if remote_plugin == plugin_name:
+                plugin = lisa_all_plugins[plugin_name]
+                user, repo = plugin['repo_url'].split("/")[-2:]
+                changelog_request = requests.get(
+                    'https://raw.githubusercontent.com/{user}/{repo}/master/{changelog_file}'.format(
+                        user=user,
+                        repo=repo,
+                        changelog_file='CHANGELOG.md'
+                    )
                 )
-            )
-            if changelog_request.ok:
-                return HttpResponse(mistune.markdown(changelog_request.content))
-            else:
-                return HttpResponseNotFound("<h4>The plugin's changelog was not found on his repository</h4>")
+                if changelog_request.ok:
+                    return HttpResponse(mistune.markdown(changelog_request.content.decode()))
+                else:
+                    return HttpResponseNotFound("<h4>The plugin's changelog was not found on his repository</h4>")
+        return HttpResponseNotFound('<h4>The plugin was not found on the plugin list</h4>')
     return HttpResponseNotFound('<h4>The plugin was not found on the plugin list</h4>')
 
 
