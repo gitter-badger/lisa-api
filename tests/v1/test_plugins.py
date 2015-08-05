@@ -8,6 +8,7 @@ from django.utils.six import StringIO
 from django.test.utils import captured_stderr
 from testfixtures import log_capture
 import mock
+import pip
 
 
 class fakecookie(object):
@@ -36,10 +37,11 @@ class CoreTests(APITestCase):
     def setUp(self):
         # Every test needs access to the request factory.
         self.plugin = Plugin.objects.create(name="testplugin")
-        self.plugin_url = '/api/v1/core/plugins/%i/' % self.plugin.id
+        self.plugin_url = '/api/v1/core/plugins/%s/' % self.plugin.name
         self.plugin_manager = PluginManager()
 
-    def test_v1_create_plugin(self):
+    @mock.patch.object(pip, 'main')
+    def test_v1_create_plugin(self, mock_pip_main):
         """
         Ensure we can install a new plugin
         """
@@ -49,15 +51,33 @@ class CoreTests(APITestCase):
             'version': u'1.8.3'
         }
         response = self.client.post(url, data, format='json')
+        mock_pip_main.assert_called_once_with(['install', 'lisa-plugins-' + ''.join([data.get('name'), "==",
+                                                                                     data.get('version')])])
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data.get('name'), data.get('name'))
 
-    def test_v1_destroy_plugin(self):
+    @mock.patch.object(pip, 'main')
+    def test_v1_destroy_plugin(self, mock_pip_main):
         """
         Ensure we can uninstall a plugin
         """
         response = self.client.delete(self.plugin_url, format='json')
+        mock_pip_main.assert_called_once_with(['uninstall', '--yes', 'lisa-plugins-' + self.plugin.name])
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    @mock.patch.object(pip, 'main')
+    def test_v1_modify_plugin(self, mock_pip_main):
+        """
+        Ensure we can modify a plugin
+        """
+        data = {
+            'name': u'testplugin',
+            'version': u'1.0'
+        }
+        response = self.client.put(self.plugin_url, data, format='json')
+        mock_pip_main.assert_called_once_with(['install', 'lisa-plugins-' + ''.join([data.get('name'), "==",
+                                                                                     data.get('version')])])
+        self.assertEqual(response.data.get('version'), data.get('version'))
 
     @log_capture()
     def test_v1_load_intent_plugin(self, l):
@@ -68,3 +88,13 @@ class CoreTests(APITestCase):
         l.check(
             ('lisa_api', 'INFO', 'There is no plugin loaded')
         )
+
+    @log_capture()
+    def test_v1_get_version_plugin(self, l):
+        """
+        Load plugin version
+        """
+        version = self.plugin_manager.get_version(plugin_name='shopping')
+        # As we don't have plugin loaded, it should use the
+        # default value of the base class which is None
+        self.assertEqual(version, None)

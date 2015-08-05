@@ -16,9 +16,6 @@ class PluginManager(object):
         self.django_plugins = []
         self.load_plugins()
 
-    def intents(self, ext):
-        return (ext.name, ext.obj.add_intents())
-
     def load_plugins(self):
         self.mgr = extension.ExtensionManager(
             namespace='lisa.api.plugins',
@@ -37,5 +34,17 @@ class PluginManager(object):
                 self.mgr.map(lambda ext: (ext.name, ext.obj.add_intents()))
             except RuntimeError:
                 logger.info("There was a problem loading plugins intents")
+        else:
+            logger.info("There is no plugin loaded")
+
+    def get_version(self, plugin_name):
+        if self.plugins:
+            try:
+                version = self.mgr.map(lambda ext: (ext.name, ext.obj.get_version()))
+                for plugin in version:
+                    if plugin_name == plugin[0]:
+                        return plugin[1]
+            except RuntimeError:
+                logger.info("There was a problem loading plugins")
         else:
             logger.info("There is no plugin loaded")

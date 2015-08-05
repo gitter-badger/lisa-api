@@ -16,7 +16,6 @@ from lisa_api.lisa.configuration import CONF as config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 config.load(filenames=[
     '/etc/lisa/conf/lisa_api.ini',
     BASE_DIR + '/lisa_api.ini',
@@ -47,12 +46,31 @@ PREREQ_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'compressor',
     'rest_framework',
     'rest_framework_swagger',
 ]
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+COMPRESS_ROOT = os.path.join(BASE_DIR, 'static')
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+)
+
+# COMPRESS_ENABLED = True
+# COMPRESS_OFFLINE = True
+
 PROJECT_APPS = [
     'lisa_api.api',
+    'lisa_api.frontend',
 ]
 
 PM = PluginManager()
@@ -84,6 +102,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'lisa_api.frontend.context_processors.version_processor',
             ],
         },
     },
@@ -129,16 +148,11 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/static-files/
-
-STATIC_URL = '/static/'
-
 LOGGING_CONFIG = None
 
 config.add_opt(name='user', value='guest', section='rabbitmq')
 config.add_opt(name='password', value='guest', section='rabbitmq')
 config.add_opt(name='host', value='localhost', section='rabbitmq')
 
-LOGIN_REDIRECT_URL = '/docs/'
-LOGIN_URL = '/api-auth/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'

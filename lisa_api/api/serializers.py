@@ -19,6 +19,9 @@ class PluginSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Plugin
         fields = ('url', 'name', 'version')
+        extra_kwargs = {
+            'url': {'lookup_field': 'name'}
+        }
 
 
 class IntentSerializer(serializers.HyperlinkedModelSerializer):

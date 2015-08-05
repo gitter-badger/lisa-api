@@ -80,7 +80,10 @@ setup(
         'six',
         'kombu',
         'requests',
-        'cookiecutter'
+        'cookiecutter',
+        'mistune',
+        'django-compressor',
+        'django-libsass'
     ],
     zip_safe=False,
     classifiers=[

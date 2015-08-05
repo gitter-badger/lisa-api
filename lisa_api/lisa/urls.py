@@ -31,6 +31,7 @@ router.register(r'zones', api_views.ZoneViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    url(r'^', include('lisa_api.frontend.urls', namespace='frontend')),
     url(r'^api/v1/core/', include(router.urls)),
     url(r'^api/v1/core/speak/', api_views.SpeakView),
     url(r'^api/v1/core/tts/', api_views.TTSView),
