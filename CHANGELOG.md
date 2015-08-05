@@ -1,5 +1,14 @@
+# v0.5
+## 08/04/2015
+
+1. [](#new)
+    * Add a filter input for plugins
+    * Add keywords/tags on plugins
+    * Add the upgrade function
+    * Add tests for frontend
+
 # v0.4.5
-## not released yet
+## 07/18/2015
 
 1. [](#new)
     * Add a progress bar loader for pages

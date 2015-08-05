@@ -1,5 +1,5 @@
 __title__ = 'Lisa API'
-__version__ = '0.4.5'
+__version__ = '0.5'
 __author__ = 'Julien Syx'
 __license__ = 'Apache'
 __copyright__ = 'Copyright 2015 Julien Syx'
